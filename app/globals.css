@@ -1,0 +1,430 @@
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+  --cyan: #8bf7ff;
+  --cyan-soft: rgba(139, 247, 255, 0.34);
+  --gold: #f4c96b;
+  --gold-soft: rgba(244, 201, 107, 0.24);
+  --panel: rgba(4, 14, 18, 0.74);
+  --panel-deep: rgba(0, 0, 0, 0.76);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
+}
+
+body {
+  background: #000;
+  color: var(--foreground);
+  font-family:
+    "Chakra Petch",
+    "Rajdhani",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.alliant-page {
+  isolation: isolate;
+  min-height: 100vh;
+  overflow: hidden;
+  padding: 1rem;
+  position: relative;
+}
+
+.page-backdrop {
+  background:
+    linear-gradient(rgba(139, 247, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 247, 255, 0.04) 1px, transparent 1px),
+    radial-gradient(circle at 50% 30%, rgba(244, 201, 107, 0.18), transparent 28rem),
+    radial-gradient(circle at 20% 72%, rgba(139, 247, 255, 0.12), transparent 24rem),
+    #000;
+  background-size: 48px 48px, 48px 48px, auto, auto, auto;
+  inset: 0;
+  opacity: 0.96;
+  position: fixed;
+  z-index: -3;
+}
+
+.page-backdrop::after {
+  background:
+    linear-gradient(90deg, transparent, rgba(139, 247, 255, 0.16), transparent),
+    linear-gradient(180deg, transparent, rgba(244, 201, 107, 0.1), transparent);
+  content: "";
+  inset: 0;
+  opacity: 0.2;
+  position: absolute;
+}
+
+.site-header {
+  align-items: center;
+  border-bottom: 1px solid rgba(139, 247, 255, 0.18);
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: 1180px;
+  padding: 0.9rem 0.25rem 1.15rem;
+  position: relative;
+  z-index: 5;
+}
+
+.brand-mark,
+.project-nav a,
+.project-card {
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+}
+
+.brand-mark {
+  align-items: center;
+  background: rgba(0, 0, 0, 0.72);
+  box-shadow:
+    inset 0 0 0 1px rgba(139, 247, 255, 0.28),
+    0 0 22px rgba(244, 201, 107, 0.1);
+  color: #ecfeff;
+  display: inline-flex;
+  font-size: 0.8rem;
+  font-weight: 800;
+  gap: 0.6rem;
+  min-height: 2.6rem;
+  padding: 0 1rem;
+  text-transform: uppercase;
+}
+
+.brand-dot {
+  background: var(--gold);
+  border-radius: 999px;
+  box-shadow: 0 0 16px rgba(244, 201, 107, 0.8);
+  height: 0.46rem;
+  width: 0.46rem;
+}
+
+.project-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  justify-content: flex-end;
+}
+
+.project-nav a {
+  background:
+    linear-gradient(180deg, rgba(139, 247, 255, 0.11), rgba(0, 0, 0, 0.68)),
+    rgba(0, 0, 0, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(139, 247, 255, 0.24);
+  color: rgba(236, 254, 255, 0.86);
+  font-size: 0.68rem;
+  font-weight: 700;
+  min-height: 2.25rem;
+  padding: 0.72rem 0.8rem;
+  text-transform: uppercase;
+  transition:
+    box-shadow 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.project-nav a:hover,
+.project-nav a:focus-visible,
+.project-card:hover,
+.project-card:focus-visible {
+  box-shadow:
+    inset 0 0 0 1px rgba(244, 201, 107, 0.44),
+    0 0 26px rgba(139, 247, 255, 0.16);
+  color: #fff;
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.hero-shell {
+  align-items: center;
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: minmax(18rem, 0.8fr) minmax(22rem, 1.2fr);
+  margin: 0 auto;
+  max-width: 1180px;
+  min-height: calc(100vh - 6rem);
+  padding: 2.2rem 0 1.5rem;
+}
+
+.hero-copy {
+  max-width: 34rem;
+  position: relative;
+  z-index: 3;
+}
+
+.eyebrow,
+.section-label,
+.project-signal {
+  color: var(--gold);
+  font-size: 0.72rem;
+  font-weight: 800;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  color: #fff;
+  font-size: clamp(4.2rem, 10vw, 8.8rem);
+  line-height: 0.82;
+  margin-bottom: 1.1rem;
+  text-shadow:
+    0 0 28px rgba(139, 247, 255, 0.22),
+    0 0 44px rgba(244, 201, 107, 0.16);
+  text-transform: uppercase;
+}
+
+.hero-lede {
+  color: rgba(236, 254, 255, 0.84);
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  line-height: 1.55;
+  margin-bottom: 0;
+}
+
+.shield-stage {
+  align-items: center;
+  aspect-ratio: 1.05;
+  display: grid;
+  justify-items: center;
+  min-height: 35rem;
+  position: relative;
+}
+
+.gold-light {
+  background:
+    radial-gradient(circle, rgba(244, 201, 107, 0.55), rgba(244, 201, 107, 0.16) 34%, transparent 68%),
+    conic-gradient(from 90deg, transparent, rgba(244, 201, 107, 0.16), transparent, rgba(139, 247, 255, 0.1), transparent);
+  border-radius: 999px;
+  filter: blur(3px);
+  height: min(74vw, 34rem);
+  max-height: 34rem;
+  max-width: 34rem;
+  opacity: 0.72;
+  position: absolute;
+  width: min(74vw, 34rem);
+  z-index: -1;
+}
+
+.shield-logo {
+  filter:
+    drop-shadow(0 0 34px rgba(244, 201, 107, 0.2))
+    drop-shadow(0 0 22px rgba(139, 247, 255, 0.1));
+  height: auto;
+  max-width: min(56vw, 31rem);
+  position: relative;
+  width: 72%;
+  z-index: 2;
+}
+
+.project-gallery {
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.project-card {
+  background:
+    linear-gradient(135deg, rgba(139, 247, 255, 0.15), rgba(244, 201, 107, 0.09) 48%, rgba(0, 0, 0, 0.84)),
+    var(--panel);
+  box-shadow:
+    inset 0 0 0 1px rgba(139, 247, 255, 0.24),
+    0 18px 50px rgba(0, 0, 0, 0.44);
+  color: rgba(236, 254, 255, 0.8);
+  display: grid;
+  gap: 0.42rem;
+  max-width: 14.5rem;
+  min-height: 10.5rem;
+  padding: 1rem;
+  pointer-events: auto;
+  position: absolute;
+  transition:
+    box-shadow 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.project-card strong {
+  color: #fff;
+  font-size: 1.06rem;
+  text-transform: uppercase;
+}
+
+.project-card span:last-child {
+  font-size: 0.9rem;
+  line-height: 1.42;
+}
+
+.project-card-1 {
+  left: 0;
+  top: 9%;
+}
+
+.project-card-2 {
+  right: 0;
+  top: 18%;
+}
+
+.project-card-3 {
+  bottom: 7%;
+  left: 8%;
+}
+
+.mission-band {
+  align-items: start;
+  background:
+    linear-gradient(90deg, rgba(139, 247, 255, 0.11), rgba(244, 201, 107, 0.08), rgba(0, 0, 0, 0.74)),
+    var(--panel-deep);
+  border-top: 1px solid rgba(139, 247, 255, 0.18);
+  box-shadow: inset 0 1px 0 rgba(244, 201, 107, 0.16);
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: minmax(16rem, 0.85fr) minmax(18rem, 1.15fr);
+  margin: 0 auto;
+  max-width: 1180px;
+  padding: 1.35rem 0.25rem 0.35rem;
+}
+
+.mission-band h2 {
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  line-height: 1.05;
+  margin-bottom: 0;
+  text-transform: uppercase;
+}
+
+.mission-band p:last-child {
+  color: rgba(236, 254, 255, 0.78);
+  font-size: 1rem;
+  line-height: 1.55;
+  margin-bottom: 0;
+}
+
+@media (max-width: 900px) {
+  .alliant-page {
+    padding: 0.8rem;
+  }
+
+  .site-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .project-nav {
+    justify-content: flex-start;
+  }
+
+  .hero-shell {
+    gap: 0.8rem;
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding-top: 2rem;
+  }
+
+  .hero-copy {
+    max-width: 42rem;
+  }
+
+  .shield-stage {
+    min-height: 42rem;
+  }
+
+  .shield-logo {
+    max-width: min(78vw, 28rem);
+    width: 66%;
+  }
+
+  .project-card-1 {
+    left: 0;
+    top: 4%;
+  }
+
+  .project-card-2 {
+    right: 0;
+    top: 22%;
+  }
+
+  .project-card-3 {
+    bottom: 3%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .project-card-3:hover,
+  .project-card-3:focus-visible {
+    transform: translateX(-50%) translateY(-2px);
+  }
+
+  .mission-band {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .project-nav a {
+    flex: 1 1 9.2rem;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: clamp(3.5rem, 18vw, 5rem);
+  }
+
+  .shield-stage {
+    aspect-ratio: auto;
+    display: block;
+    min-height: auto;
+    padding-top: 2rem;
+  }
+
+  .gold-light {
+    height: 20rem;
+    width: 20rem;
+  }
+
+  .shield-logo {
+    display: block;
+    margin: 0 auto;
+    max-width: 21rem;
+    width: 92%;
+  }
+
+  .project-gallery {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    position: static;
+  }
+
+  .project-card {
+    max-width: none;
+    min-height: auto;
+    position: static;
+    width: 100%;
+  }
+
+  .project-card-3,
+  .project-card-3:hover,
+  .project-card-3:focus-visible {
+    transform: none;
+  }
+}
