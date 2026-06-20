@@ -3,6 +3,12 @@ import Link from "next/link";
 
 const projects = [
   {
+    name: "Playtest Board",
+    href: "/quantum-tunnel",
+    signal: "Paper game",
+    body: "A visual table layout for testing Quantum Tunnel cards, missions, battle pressure, and gate checks.",
+  },
+  {
     name: "Sovereign Engine",
     href: "https://sovengine.xyz",
     signal: "Verified origin",
@@ -33,9 +39,9 @@ export default function Home() {
         </Link>
         <nav className="project-nav" aria-label="Project links">
           {projects.map((project) => (
-            <a key={project.href} href={project.href}>
+            <Link key={project.href} href={project.href}>
               {project.name}
-            </a>
+            </Link>
           ))}
         </nav>
       </header>
@@ -64,7 +70,7 @@ export default function Home() {
 
           <div className="project-gallery">
             {projects.map((project, index) => (
-              <a
+              <Link
                 className={`project-card project-card-${index + 1}`}
                 href={project.href}
                 key={project.href}
@@ -72,7 +78,7 @@ export default function Home() {
                 <span className="project-signal">{project.signal}</span>
                 <strong>{project.name}</strong>
                 <span>{project.body}</span>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
@@ -90,6 +96,11 @@ export default function Home() {
           useful, and able to create income over time.
         </p>
       </section>
+
+      <footer className="site-footer">
+        <span>Paper Lab</span>
+        <Link href="/quantum-tunnel">Quantum Tunnel Playtest Board</Link>
+      </footer>
     </main>
   );
 }

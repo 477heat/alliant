@@ -293,6 +293,11 @@ h1 {
   left: 8%;
 }
 
+.project-card-4 {
+  bottom: 4%;
+  right: 7%;
+}
+
 .mission-band {
   align-items: start;
   background:
@@ -320,6 +325,31 @@ h1 {
   font-size: 1rem;
   line-height: 1.55;
   margin-bottom: 0;
+}
+
+.site-footer {
+  align-items: center;
+  border-top: 1px solid rgba(139, 247, 255, 0.16);
+  color: rgba(236, 254, 255, 0.62);
+  display: flex;
+  font-size: 0.72rem;
+  font-weight: 800;
+  gap: 0.8rem;
+  justify-content: space-between;
+  margin: 1.1rem auto 0;
+  max-width: 1180px;
+  padding: 1rem 0.25rem 0;
+  text-transform: uppercase;
+}
+
+.site-footer a {
+  color: var(--gold);
+}
+
+.site-footer a:hover,
+.site-footer a:focus-visible {
+  color: #fff;
+  outline: none;
 }
 
 @media (max-width: 900px) {
@@ -372,6 +402,11 @@ h1 {
     transform: translateX(-50%);
   }
 
+  .project-card-4 {
+    bottom: 16%;
+    right: 2%;
+  }
+
   .project-card-3:hover,
   .project-card-3:focus-visible {
     transform: translateX(-50%) translateY(-2px);
@@ -379,6 +414,11 @@ h1 {
 
   .mission-band {
     grid-template-columns: 1fr;
+  }
+
+  .site-footer {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
 
@@ -455,8 +495,380 @@ h1 {
   }
 
   .project-card-3,
+  .project-card-4,
   .project-card-3:hover,
-  .project-card-3:focus-visible {
+  .project-card-4:hover,
+  .project-card-3:focus-visible,
+  .project-card-4:focus-visible {
     transform: none;
+  }
+}
+
+.playtest-page {
+  padding-bottom: 2rem;
+}
+
+.playtest-hero {
+  align-items: end;
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(18rem, 0.95fr) minmax(18rem, 0.55fr);
+  margin: 0 auto;
+  max-width: 1180px;
+  padding: 2.25rem 0 1.25rem;
+}
+
+.playtest-hero h1 {
+  font-size: clamp(3.2rem, 8vw, 6.4rem);
+  margin-bottom: 0;
+}
+
+.playtest-hero p:last-child {
+  color: rgba(236, 254, 255, 0.76);
+  font-size: 1.05rem;
+  line-height: 1.55;
+  margin-bottom: 0.45rem;
+}
+
+.tabletop-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(18rem, 0.8fr) minmax(24rem, 1.2fr);
+  margin: 0 auto;
+  max-width: 1180px;
+}
+
+.soul-sheet,
+.mission-panel,
+.gate-panel,
+.loadout-zone {
+  background:
+    linear-gradient(135deg, rgba(139, 247, 255, 0.1), rgba(244, 201, 107, 0.06), rgba(0, 0, 0, 0.78)),
+    var(--panel-deep);
+  box-shadow:
+    inset 0 0 0 1px rgba(139, 247, 255, 0.2),
+    0 18px 52px rgba(0, 0, 0, 0.34);
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+}
+
+.soul-sheet,
+.mission-panel,
+.gate-panel {
+  min-height: 24rem;
+  padding: 1rem;
+}
+
+.soul-sheet {
+  display: grid;
+  gap: 1rem;
+  grid-row: span 2;
+}
+
+.board-heading {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.board-heading h2 {
+  color: #fff;
+  font-size: clamp(1.25rem, 2.5vw, 1.85rem);
+  line-height: 1;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.soul-core {
+  align-items: center;
+  border: 1px solid rgba(244, 201, 107, 0.18);
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 6.6rem 1fr;
+  padding: 0.8rem;
+}
+
+.soul-core strong {
+  color: #fff;
+  display: block;
+  font-size: 1.25rem;
+  margin-top: 0.25rem;
+  text-transform: uppercase;
+}
+
+.soul-core p {
+  color: rgba(236, 254, 255, 0.66);
+  line-height: 1.45;
+  margin: 0.5rem 0 0;
+}
+
+.soul-sigil {
+  align-items: center;
+  aspect-ratio: 1;
+  background:
+    radial-gradient(circle, rgba(244, 201, 107, 0.22), rgba(0, 0, 0, 0.1) 60%),
+    rgba(139, 247, 255, 0.04);
+  border: 1px solid rgba(139, 247, 255, 0.32);
+  color: var(--gold);
+  display: grid;
+  font-size: 1.5rem;
+  font-weight: 900;
+  justify-items: center;
+}
+
+.mini-label {
+  color: rgba(139, 247, 255, 0.7);
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.stat-grid {
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.stat-tile {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(139, 247, 255, 0.18);
+  display: grid;
+  gap: 0.22rem;
+  min-height: 6rem;
+  padding: 0.75rem;
+}
+
+.stat-tile span,
+.card-type,
+.pressure-card span {
+  color: rgba(139, 247, 255, 0.76);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.stat-tile strong {
+  color: #fff;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.stat-tile em {
+  color: rgba(236, 254, 255, 0.56);
+  font-size: 0.82rem;
+  font-style: normal;
+}
+
+.mission-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.mission-track {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.pressure-card,
+.game-card,
+.outcome-chip {
+  background:
+    linear-gradient(180deg, rgba(139, 247, 255, 0.08), rgba(0, 0, 0, 0.64)),
+    rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(139, 247, 255, 0.18);
+}
+
+.pressure-card {
+  display: grid;
+  gap: 0.7rem;
+  min-height: 12rem;
+  padding: 0.8rem;
+}
+
+.pressure-card strong {
+  color: #fff;
+  font-size: 1.05rem;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.pressure-card p {
+  align-self: end;
+  color: rgba(236, 254, 255, 0.68);
+  font-size: 0.88rem;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.gate-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.gate-meter {
+  align-items: center;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: auto 1fr auto;
+}
+
+.gate-meter > span {
+  color: var(--gold);
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.gate-window {
+  align-items: center;
+  background:
+    linear-gradient(90deg, rgba(244, 201, 107, 0.16), rgba(139, 247, 255, 0.28), rgba(244, 201, 107, 0.16)),
+    rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(244, 201, 107, 0.28);
+  display: grid;
+  min-height: 4rem;
+  text-align: center;
+}
+
+.gate-window span {
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.gate-total {
+  color: #fff;
+  font-size: clamp(1.85rem, 4vw, 3.25rem);
+  font-weight: 900;
+  line-height: 1;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.outcome-row {
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.outcome-chip {
+  display: grid;
+  gap: 0.35rem;
+  min-height: 5rem;
+  padding: 0.7rem;
+}
+
+.outcome-chip strong {
+  color: var(--gold);
+  text-transform: uppercase;
+}
+
+.outcome-chip span {
+  color: rgba(236, 254, 255, 0.66);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.loadout-zone {
+  display: grid;
+  gap: 1rem;
+  margin: 1rem auto 0;
+  max-width: 1180px;
+  padding: 1rem;
+}
+
+.loadout-cards {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.game-card {
+  display: grid;
+  gap: 0.65rem;
+  min-height: 15rem;
+  padding: 0.85rem;
+}
+
+.game-card h3 {
+  color: #fff;
+  font-size: 1.02rem;
+  line-height: 1.05;
+  margin: 0;
+  min-height: 2.25rem;
+  text-transform: uppercase;
+}
+
+.card-stat {
+  align-items: center;
+  aspect-ratio: 1.75;
+  border: 1px solid rgba(244, 201, 107, 0.25);
+  color: var(--gold);
+  display: grid;
+  font-size: 0.86rem;
+  font-weight: 900;
+  justify-items: center;
+  text-transform: uppercase;
+}
+
+.game-card p {
+  align-self: end;
+  color: rgba(236, 254, 255, 0.72);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+@media (max-width: 980px) {
+  .playtest-hero,
+  .tabletop-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .soul-sheet {
+    grid-row: auto;
+  }
+
+  .mission-track {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .loadout-cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .playtest-hero {
+    gap: 0.75rem;
+    padding-top: 1.5rem;
+  }
+
+  .playtest-hero h1 {
+    font-size: clamp(2.75rem, 16vw, 4.2rem);
+  }
+
+  .soul-core,
+  .mission-track,
+  .outcome-row,
+  .loadout-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .soul-core {
+    align-items: start;
+  }
+
+  .soul-sigil {
+    max-width: 7rem;
+  }
+
+  .pressure-card,
+  .game-card {
+    min-height: auto;
+  }
+
+  .gate-total {
+    font-size: 1.85rem;
   }
 }
