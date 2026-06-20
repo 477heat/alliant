@@ -212,15 +212,14 @@ export default function QuantumTunnelPage() {
           <div className="character-card-frame" aria-label="Portrait character card example">
             <div className="soul-core">
               <div className="soul-sigil" aria-hidden="true">
-                QT
+                SP
               </div>
               <div>
                 <span className="mini-label">Character / portrait card</span>
-                <strong>Signal Runner</strong>
+                <strong>Sweetpea</strong>
                 <p>
-                  Balanced starting{" "}
-                  <GlossaryTerm term="Character">character</GlossaryTerm> for
-                  the first table test.
+                  Signal Runner / test{" "}
+                  <GlossaryTerm term="Character">character</GlossaryTerm>.
                 </p>
               </div>
             </div>
