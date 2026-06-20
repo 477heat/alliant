@@ -49,6 +49,39 @@ const pressureTurns = [
   { turn: "04", card: "Echo Break", result: "Recover the Echo break or lose 1 Echo" },
 ] as const;
 
+const missionModifiers = [
+  {
+    name: "Static Field",
+    element: "Signal",
+    status: "active",
+    effect: "Focus drain is +1.",
+  },
+  {
+    name: "False Door",
+    element: "Signal",
+    status: "active",
+    effect: "Add 1 pressure turn.",
+  },
+  {
+    name: "Bone Gravity",
+    element: "Body",
+    status: "null",
+    effect: "No effect.",
+  },
+  {
+    name: "Memory Fog",
+    element: "Echo",
+    status: "null",
+    effect: "No effect.",
+  },
+  {
+    name: "Ash Wind",
+    element: "Fire",
+    status: "null",
+    effect: "No effect.",
+  },
+] as const;
+
 const turnSteps = [
   {
     step: "01",
@@ -115,9 +148,10 @@ export default function QuantumTunnelPage() {
         </div>
         <p>
           One <GlossaryTerm term="Soul">soul</GlossaryTerm>, five{" "}
-          <GlossaryTerm term="Loadout">cards</GlossaryTerm>, four{" "}
+          <GlossaryTerm term="Loadout">loadout cards</GlossaryTerm>, one{" "}
+          <GlossaryTerm term="Mission Card">mission card</GlossaryTerm>, five{" "}
+          <GlossaryTerm term="Modifier">modifiers</GlossaryTerm>, four or more{" "}
           <GlossaryTerm term="Pressure Turn">pressure turns</GlossaryTerm>, one{" "}
-          <GlossaryTerm term="Final Gate">gate</GlossaryTerm>, one{" "}
           <GlossaryTerm term="Reward">reward</GlossaryTerm>.
         </p>
       </section>
@@ -202,32 +236,74 @@ export default function QuantumTunnelPage() {
         <article className="mission-panel" id="mission">
           <div className="board-heading">
             <p className="section-label">
-              <GlossaryTerm term="Mission">Mission</GlossaryTerm>
+              <GlossaryTerm term="Mission Card">Mission card</GlossaryTerm>
             </p>
-            <h2>Find The Signal Origin</h2>
+            <h2>One card, two uses</h2>
           </div>
-          <div className="mission-track">
-            {pressureTurns.map((pressure) => (
-              <div className="pressure-card" key={pressure.turn}>
-                <span>Turn {pressure.turn}</span>
-                <strong>{pressure.card}</strong>
+          <div className="dual-mission-card" aria-label="Dual-use mission card example">
+            <div className="mission-half mission-half--top">
+              <span className="mini-label">
+                Top half / <GlossaryTerm term="Mission">mission</GlossaryTerm>
+              </span>
+              <h3>Find The Signal Origin</h3>
+              <dl className="mission-facts">
+                <div>
+                  <dt>
+                    <GlossaryTerm term="Element">Element</GlossaryTerm>
+                  </dt>
+                  <dd>Signal</dd>
+                </div>
+                <div>
+                  <dt>Length</dt>
+                  <dd>4+ turns</dd>
+                </div>
+                <div>
+                  <dt>
+                    <GlossaryTerm term="Final Gate">Gate</GlossaryTerm>
+                  </dt>
+                  <dd>Will + Focus + Echo</dd>
+                </div>
+                <div>
+                  <dt>
+                    <GlossaryTerm term="Reward">Reward</GlossaryTerm>
+                  </dt>
+                  <dd>Signal Fragment</dd>
+                </div>
+              </dl>
+            </div>
+            <div className="mission-divider" aria-hidden="true" />
+            <div className="mission-half mission-half--bottom">
+              <div className="modifier-rotated">
+                <span className="mini-label">
+                  Bottom half / <GlossaryTerm term="Modifier">modifier</GlossaryTerm>
+                </span>
+                <h3>Static Field</h3>
                 <p>
-                  <GlossaryText
-                    terms={[
-                      "Battle",
-                      "Block",
-                      "Clear",
-                      "Drain",
-                      "Echo",
-                      "Focus",
-                      "Minor Threat",
-                      "Recover",
-                      "Threat",
-                      "Vigor",
-                    ]}
-                    text={pressure.result}
-                  />
+                  <GlossaryTerm term="Element">Element</GlossaryTerm>: Signal.
+                  If this matches the mission, Focus drain is +1.
                 </p>
+              </div>
+            </div>
+          </div>
+          <div className="modifier-rule">
+            <strong>5 attached modifiers</strong>
+            <p>
+              Matching <GlossaryTerm term="Element">element</GlossaryTerm> ={" "}
+              <GlossaryTerm term="Active Modifier">active</GlossaryTerm>.
+              Different element ={" "}
+              <GlossaryTerm term="Null Modifier">null</GlossaryTerm>.
+            </p>
+          </div>
+          <div className="modifier-grid" aria-label="Attached modifier cards">
+            {missionModifiers.map((modifier) => (
+              <div
+                className={`modifier-chip modifier-chip--${modifier.status}`}
+                key={modifier.name}
+              >
+                <span>{modifier.status}</span>
+                <strong>{modifier.name}</strong>
+                <em>{modifier.element}</em>
+                <p>{modifier.effect}</p>
               </div>
             ))}
           </div>
@@ -275,6 +351,40 @@ export default function QuantumTunnelPage() {
             ))}
           </div>
         </article>
+      </section>
+
+      <section className="pressure-zone" aria-label="Mission pressure turns">
+        <div className="board-heading">
+          <p className="section-label">
+            <GlossaryTerm term="Mission Pressure">Mission pressure</GlossaryTerm>
+          </p>
+          <h2>Revealed pressure track</h2>
+        </div>
+        <div className="mission-track">
+          {pressureTurns.map((pressure) => (
+            <div className="pressure-card" key={pressure.turn}>
+              <span>Turn {pressure.turn}</span>
+              <strong>{pressure.card}</strong>
+              <p>
+                <GlossaryText
+                  terms={[
+                    "Battle",
+                    "Block",
+                    "Clear",
+                    "Drain",
+                    "Echo",
+                    "Focus",
+                    "Minor Threat",
+                    "Recover",
+                    "Threat",
+                    "Vigor",
+                  ]}
+                  text={pressure.result}
+                />
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section className="loadout-zone" id="loadout" aria-label="Five-card loadout">

@@ -621,6 +621,7 @@ h1 {
 .soul-sheet,
 .mission-panel,
 .gate-panel,
+.pressure-zone,
 .turn-guide,
 .loadout-zone {
   background:
@@ -788,6 +789,169 @@ h1 {
 .mission-panel {
   display: grid;
   gap: 1rem;
+}
+
+.dual-mission-card {
+  background:
+    linear-gradient(180deg, rgba(139, 247, 255, 0.1), rgba(244, 201, 107, 0.08)),
+    rgba(0, 0, 0, 0.58);
+  border: 1px solid rgba(244, 201, 107, 0.24);
+  display: grid;
+  min-height: 22rem;
+  overflow: hidden;
+}
+
+.mission-half {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.95rem;
+}
+
+.mission-half h3 {
+  color: #fff;
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  line-height: 0.95;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.mission-half--bottom {
+  align-items: center;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.72), rgba(139, 247, 255, 0.08)),
+    rgba(0, 0, 0, 0.58);
+  min-height: 8.5rem;
+}
+
+.modifier-rotated {
+  display: grid;
+  gap: 0.45rem;
+  transform: rotate(180deg);
+}
+
+.modifier-rotated p {
+  color: rgba(236, 254, 255, 0.68);
+  font-size: 0.88rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.mission-divider {
+  background: linear-gradient(90deg, transparent, rgba(244, 201, 107, 0.55), transparent);
+  min-height: 1px;
+}
+
+.mission-facts {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+}
+
+.mission-facts div {
+  border: 1px solid rgba(139, 247, 255, 0.16);
+  display: grid;
+  gap: 0.25rem;
+  min-height: 4.2rem;
+  padding: 0.55rem;
+}
+
+.mission-facts dt {
+  color: rgba(139, 247, 255, 0.74);
+  font-size: 0.64rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.mission-facts dd {
+  color: #fff;
+  font-size: 0.86rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.modifier-rule {
+  border: 1px solid rgba(139, 247, 255, 0.16);
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.7rem;
+}
+
+.modifier-rule strong {
+  color: var(--gold);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.modifier-rule p {
+  color: rgba(236, 254, 255, 0.68);
+  font-size: 0.88rem;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.modifier-grid {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.modifier-chip {
+  background: rgba(0, 0, 0, 0.42);
+  border: 1px solid rgba(139, 247, 255, 0.16);
+  display: grid;
+  gap: 0.25rem;
+  min-height: 6.4rem;
+  padding: 0.55rem;
+}
+
+.modifier-chip--active {
+  border-color: rgba(244, 201, 107, 0.42);
+  box-shadow: inset 0 0 0 1px rgba(244, 201, 107, 0.12);
+}
+
+.modifier-chip--null {
+  opacity: 0.54;
+}
+
+.modifier-chip span,
+.modifier-chip em {
+  font-size: 0.58rem;
+  font-style: normal;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.modifier-chip span {
+  color: var(--gold);
+}
+
+.modifier-chip em {
+  color: rgba(139, 247, 255, 0.74);
+}
+
+.modifier-chip strong {
+  color: #fff;
+  font-size: 0.78rem;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.modifier-chip p {
+  color: rgba(236, 254, 255, 0.66);
+  font-size: 0.68rem;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.pressure-zone {
+  display: grid;
+  gap: 1rem;
+  margin: 1rem auto 0;
+  max-width: 1180px;
+  padding: 1rem;
 }
 
 .mission-track {
@@ -1016,6 +1180,10 @@ h1 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .modifier-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .turn-step-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1041,6 +1209,8 @@ h1 {
 
   .soul-core,
   .mission-track,
+  .mission-facts,
+  .modifier-grid,
   .outcome-row,
   .turn-step-grid,
   .loadout-cards {

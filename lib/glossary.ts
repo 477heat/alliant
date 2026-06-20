@@ -15,6 +15,8 @@ export const glossary = {
     "A card type that blocks harm, prevents stat loss, or protects the character from mission pressure.",
   Drain:
     "A loss of a stat during the mission. For example, losing 1 Focus is a Focus drain.",
+  Element:
+    "The mission tag that decides whether a modifier turns on. If the modifier element matches the mission element, the modifier applies.",
   Echo:
     "The memory and soul-connection stat. Echo helps with continuity, identity, and returning with what was learned.",
   Exhaust:
@@ -35,8 +37,16 @@ export const glossary = {
     "A smaller enemy or danger that one simple battle card can usually clear.",
   Mission:
     "The goal of the run. A mission tells the player what they are trying to fix, survive, rescue, or recover.",
+  "Mission Card":
+    "A dual-use card. The top half is used as the mission, and the upside-down bottom half is used as a modifier when attached to another mission.",
+  Modifier:
+    "The upside-down half of a mission card. It changes a mission only when its element matches the mission element.",
+  "Active Modifier":
+    "A modifier that turns on because its element matches the mission element.",
   "Mission Pressure":
     "The problem the mission creates each turn. It can be an enemy, drain, broken signal, rescue, or other danger.",
+  "Null Modifier":
+    "A modifier that does nothing because its element does not match the mission element.",
   "Partial Return":
     "A middle result. The character gets out, but only brings back a weaker reward or incomplete progress.",
   Pressure:
