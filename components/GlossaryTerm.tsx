@@ -136,6 +136,7 @@ export function GlossaryTerm({ children, term }: GlossaryTermProps) {
         aria-describedby={visible ? definitionId : undefined}
         aria-expanded={visible}
         className="glossary-term"
+        data-term={term}
         onBlur={() => setFocused(false)}
         onClick={() => setOpen((current) => !current)}
         onFocus={() => setFocused(true)}

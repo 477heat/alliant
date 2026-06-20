@@ -43,10 +43,37 @@ const loadoutCards = [
 ] as const;
 
 const pressureTurns = [
-  { turn: "01", card: "Signal Static", result: "-1 Focus unless blocked" },
-  { turn: "02", card: "Body Drift", result: "-1 Vigor unless anchored" },
-  { turn: "03", card: "Rift Hound", result: "Battle: clear or lose 2 Vigor" },
-  { turn: "04", card: "Echo Break", result: "-1 Echo unless recovered" },
+  { turn: "01", card: "Signal Static", result: "Block the drain or lose 1 Focus" },
+  { turn: "02", card: "Body Drift", result: "Block the drain or lose 1 Vigor" },
+  { turn: "03", card: "Rift Hound", result: "Battle: clear the threat or lose 2 Vigor" },
+  { turn: "04", card: "Echo Break", result: "Recover the Echo break or lose 1 Echo" },
+] as const;
+
+const turnSteps = [
+  {
+    step: "01",
+    title: "Reveal",
+    term: "Reveal Step",
+    text: "Flip the next Mission Pressure card. This tells you what the mission is doing this turn.",
+  },
+  {
+    step: "02",
+    title: "Respond",
+    term: "Response Step",
+    text: "Choose one Loadout card, block the drain, clear the threat, recover a card, or save your best card for the Final Gate.",
+  },
+  {
+    step: "03",
+    title: "Resolve",
+    term: "Resolve Step",
+    text: "Apply the choice. Anything not blocked or cleared now hurts the character, then used cards exhaust.",
+  },
+  {
+    step: "04",
+    title: "Advance",
+    term: "Advance Step",
+    text: "Move to the next Pressure Turn. After the fourth turn, make the Final Gate check.",
+  },
 ] as const;
 
 const outcomes = [
@@ -74,6 +101,7 @@ export default function QuantumTunnelPage() {
         <nav className="project-nav" aria-label="Playtest navigation">
           <Link href="/">Home</Link>
           <Link href="/dictionary">Dictionary</Link>
+          <Link href="#turns">Turns</Link>
           <Link href="#loadout">Loadout</Link>
           <Link href="#mission">Mission</Link>
           <Link href="#gate">Gate</Link>
@@ -88,10 +116,53 @@ export default function QuantumTunnelPage() {
         <p>
           One <GlossaryTerm term="Soul">soul</GlossaryTerm>, five{" "}
           <GlossaryTerm term="Loadout">cards</GlossaryTerm>, four{" "}
-          <GlossaryTerm term="Mission Pressure">pressure turns</GlossaryTerm>, one{" "}
+          <GlossaryTerm term="Pressure Turn">pressure turns</GlossaryTerm>, one{" "}
           <GlossaryTerm term="Final Gate">gate</GlossaryTerm>, one{" "}
           <GlossaryTerm term="Reward">reward</GlossaryTerm>.
         </p>
+      </section>
+
+      <section className="turn-guide" id="turns" aria-label="How a turn works">
+        <div className="board-heading">
+          <p className="section-label">
+            <GlossaryTerm term="Turn">Turn</GlossaryTerm> structure
+          </p>
+          <h2>How one pressure turn plays</h2>
+        </div>
+        <div className="turn-step-grid">
+          {turnSteps.map((step) => (
+            <article className="turn-step" key={step.step}>
+              <span>{step.step}</span>
+              <strong>
+                <GlossaryTerm term={step.term}>{step.title}</GlossaryTerm>
+              </strong>
+              <p>
+                <GlossaryText
+                  terms={[
+                    "Advance Step",
+                    "Block",
+                    "Character",
+                    "Clear",
+                    "Drain",
+                    "Echo",
+                    "Exhaust",
+                    "Final Gate",
+                    "Loadout",
+                    "Mission Pressure",
+                    "Pressure Turn",
+                    "Recover",
+                    "Response Step",
+                    "Reveal Step",
+                    "Resolve Step",
+                    "Threat",
+                    "Turn",
+                  ]}
+                  text={step.text}
+                />
+              </p>
+            </article>
+          ))}
+        </div>
       </section>
 
       <section className="tabletop-grid" aria-label="Quantum Tunnel tabletop layout">
@@ -144,10 +215,13 @@ export default function QuantumTunnelPage() {
                   <GlossaryText
                     terms={[
                       "Battle",
+                      "Block",
+                      "Clear",
                       "Drain",
                       "Echo",
                       "Focus",
                       "Minor Threat",
+                      "Recover",
                       "Threat",
                       "Vigor",
                     ]}

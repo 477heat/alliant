@@ -621,6 +621,7 @@ h1 {
 .soul-sheet,
 .mission-panel,
 .gate-panel,
+.turn-guide,
 .loadout-zone {
   background:
     linear-gradient(135deg, rgba(139, 247, 255, 0.1), rgba(244, 201, 107, 0.06), rgba(0, 0, 0, 0.78)),
@@ -629,6 +630,52 @@ h1 {
     inset 0 0 0 1px rgba(139, 247, 255, 0.2),
     0 18px 52px rgba(0, 0, 0, 0.34);
   clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+}
+
+.turn-guide {
+  display: grid;
+  gap: 1rem;
+  margin: 0 auto 1rem;
+  max-width: 1180px;
+  padding: 1rem;
+}
+
+.turn-step-grid {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.turn-step {
+  background:
+    linear-gradient(180deg, rgba(244, 201, 107, 0.1), rgba(0, 0, 0, 0.62)),
+    rgba(0, 0, 0, 0.48);
+  border: 1px solid rgba(244, 201, 107, 0.2);
+  display: grid;
+  gap: 0.65rem;
+  min-height: 13rem;
+  padding: 0.85rem;
+}
+
+.turn-step > span {
+  color: rgba(244, 201, 107, 0.82);
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.turn-step strong {
+  color: #fff;
+  font-size: 1.05rem;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.turn-step p {
+  align-self: end;
+  color: rgba(236, 254, 255, 0.7);
+  font-size: 0.9rem;
+  line-height: 1.42;
+  margin: 0;
 }
 
 .soul-sheet,
@@ -969,6 +1016,10 @@ h1 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .turn-step-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .loadout-cards {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -991,6 +1042,7 @@ h1 {
   .soul-core,
   .mission-track,
   .outcome-row,
+  .turn-step-grid,
   .loadout-cards {
     grid-template-columns: 1fr;
   }
