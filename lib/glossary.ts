@@ -9,6 +9,8 @@ export const glossary = {
     "A card effect that raises or adjusts a stat for a short time, usually for one turn or one final gate.",
   Character:
     "The person, soul, or vessel going into the mission. The character carries the main stats.",
+  "Character Card":
+    "The portrait-oriented card that represents the character. It uses the same physical card size as a mission card.",
   Clear:
     "To remove a threat or problem from the mission so it does not keep hurting the character.",
   Defense:
@@ -31,6 +33,8 @@ export const glossary = {
     "The best mission result. The character completes the goal and keeps the main reward.",
   Grace:
     "The timing stat. Grace helps with movement, rescue, dodging, and careful action.",
+  Landscape:
+    "A card orientation where the long edge runs left to right. Mission cards use this orientation.",
   Loadout:
     "The small set of cards the character brings into the mission. In the first test, the loadout is 5 cards.",
   "Minor Threat":
@@ -49,6 +53,8 @@ export const glossary = {
     "A modifier that does nothing because its element does not match the mission element.",
   "Partial Return":
     "A middle result. The character gets out, but only brings back a weaker reward or incomplete progress.",
+  Portrait:
+    "A card orientation where the long edge runs top to bottom. Character cards use this orientation.",
   Pressure:
     "The danger level of the run. More pressure means the mission is becoming harder to survive or finish cleanly.",
   "Pressure Turn":

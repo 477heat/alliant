@@ -149,10 +149,10 @@ export default function QuantumTunnelPage() {
         <p>
           One <GlossaryTerm term="Soul">soul</GlossaryTerm>, five{" "}
           <GlossaryTerm term="Loadout">loadout cards</GlossaryTerm>, one{" "}
-          <GlossaryTerm term="Mission Card">mission card</GlossaryTerm>, five{" "}
-          <GlossaryTerm term="Modifier">modifiers</GlossaryTerm>, four or more{" "}
-          <GlossaryTerm term="Pressure Turn">pressure turns</GlossaryTerm>, one{" "}
-          <GlossaryTerm term="Reward">reward</GlossaryTerm>.
+          <GlossaryTerm term="Character Card">portrait character card</GlossaryTerm>,
+          one <GlossaryTerm term="Mission Card">landscape mission card</GlossaryTerm>{" "}
+          with its <GlossaryTerm term="Modifier">modifier</GlossaryTerm> half
+          inverted. Other rules remain draft.
         </p>
       </section>
 
@@ -203,33 +203,38 @@ export default function QuantumTunnelPage() {
         <article className="soul-sheet">
           <div className="board-heading">
             <p className="section-label">
-              <GlossaryTerm term="Character">Character</GlossaryTerm>
+              <GlossaryTerm term="Character Card">Character card</GlossaryTerm>
             </p>
-            <h2>Test Soul</h2>
+            <h2>
+              Same size / <GlossaryTerm term="Portrait">portrait</GlossaryTerm>
+            </h2>
           </div>
-          <div className="soul-core">
-            <div className="soul-sigil" aria-hidden="true">
-              QT
-            </div>
-            <div>
-              <span className="mini-label">Mission role</span>
-              <strong>Signal Runner</strong>
-              <p>
-                Balanced starting <GlossaryTerm term="Soul">soul</GlossaryTerm>{" "}
-                for the first table test.
-              </p>
-            </div>
-          </div>
-          <div className="stat-grid">
-            {soulStats.map((stat) => (
-              <div className="stat-tile" key={stat.label}>
-                <span>
-                  <GlossaryTerm term={stat.label}>{stat.label}</GlossaryTerm>
-                </span>
-                <strong>{stat.value}</strong>
-                <em>{stat.note}</em>
+          <div className="character-card-frame" aria-label="Portrait character card example">
+            <div className="soul-core">
+              <div className="soul-sigil" aria-hidden="true">
+                QT
               </div>
-            ))}
+              <div>
+                <span className="mini-label">Character / portrait card</span>
+                <strong>Signal Runner</strong>
+                <p>
+                  Balanced starting{" "}
+                  <GlossaryTerm term="Character">character</GlossaryTerm> for
+                  the first table test.
+                </p>
+              </div>
+            </div>
+            <div className="stat-grid">
+              {soulStats.map((stat) => (
+                <div className="stat-tile" key={stat.label}>
+                  <span>
+                    <GlossaryTerm term={stat.label}>{stat.label}</GlossaryTerm>
+                  </span>
+                  <strong>{stat.value}</strong>
+                  <em>{stat.note}</em>
+                </div>
+              ))}
+            </div>
           </div>
         </article>
 
@@ -238,7 +243,9 @@ export default function QuantumTunnelPage() {
             <p className="section-label">
               <GlossaryTerm term="Mission Card">Mission card</GlossaryTerm>
             </p>
-            <h2>One card, two uses</h2>
+            <h2>
+              Same size / <GlossaryTerm term="Landscape">landscape</GlossaryTerm>
+            </h2>
           </div>
           <div className="dual-mission-card" aria-label="Dual-use mission card example">
             <div className="mission-half mission-half--top">
