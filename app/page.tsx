@@ -99,7 +99,10 @@ export default function Home() {
 
       <footer className="site-footer">
         <span>Paper Lab</span>
-        <Link href="/quantum-tunnel">Quantum Tunnel Playtest Board</Link>
+        <span className="footer-links">
+          <Link href="/quantum-tunnel">Quantum Tunnel Playtest Board</Link>
+          <Link href="/dictionary">Dictionary</Link>
+        </span>
       </footer>
     </main>
   );

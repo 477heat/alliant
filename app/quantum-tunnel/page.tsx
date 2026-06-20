@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { GlossaryTerm, GlossaryText } from "../../components/GlossaryTerm";
 
 const soulStats = [
   { label: "Vigor", value: 6, note: "body" },
@@ -72,6 +73,7 @@ export default function QuantumTunnelPage() {
         </Link>
         <nav className="project-nav" aria-label="Playtest navigation">
           <Link href="/">Home</Link>
+          <Link href="/dictionary">Dictionary</Link>
           <Link href="#loadout">Loadout</Link>
           <Link href="#mission">Mission</Link>
           <Link href="#gate">Gate</Link>
@@ -84,14 +86,20 @@ export default function QuantumTunnelPage() {
           <h1 id="playtest-title">Playtest Board</h1>
         </div>
         <p>
-          One soul, five cards, four pressure turns, one gate, one reward.
+          One <GlossaryTerm term="Soul">soul</GlossaryTerm>, five{" "}
+          <GlossaryTerm term="Loadout">cards</GlossaryTerm>, four{" "}
+          <GlossaryTerm term="Mission Pressure">pressure turns</GlossaryTerm>, one{" "}
+          <GlossaryTerm term="Final Gate">gate</GlossaryTerm>, one{" "}
+          <GlossaryTerm term="Reward">reward</GlossaryTerm>.
         </p>
       </section>
 
       <section className="tabletop-grid" aria-label="Quantum Tunnel tabletop layout">
         <article className="soul-sheet">
           <div className="board-heading">
-            <p className="section-label">Character</p>
+            <p className="section-label">
+              <GlossaryTerm term="Character">Character</GlossaryTerm>
+            </p>
             <h2>Test Soul</h2>
           </div>
           <div className="soul-core">
@@ -101,13 +109,18 @@ export default function QuantumTunnelPage() {
             <div>
               <span className="mini-label">Mission role</span>
               <strong>Signal Runner</strong>
-              <p>Balanced starting soul for the first table test.</p>
+              <p>
+                Balanced starting <GlossaryTerm term="Soul">soul</GlossaryTerm>{" "}
+                for the first table test.
+              </p>
             </div>
           </div>
           <div className="stat-grid">
             {soulStats.map((stat) => (
               <div className="stat-tile" key={stat.label}>
-                <span>{stat.label}</span>
+                <span>
+                  <GlossaryTerm term={stat.label}>{stat.label}</GlossaryTerm>
+                </span>
                 <strong>{stat.value}</strong>
                 <em>{stat.note}</em>
               </div>
@@ -117,7 +130,9 @@ export default function QuantumTunnelPage() {
 
         <article className="mission-panel" id="mission">
           <div className="board-heading">
-            <p className="section-label">Mission</p>
+            <p className="section-label">
+              <GlossaryTerm term="Mission">Mission</GlossaryTerm>
+            </p>
             <h2>Find The Signal Origin</h2>
           </div>
           <div className="mission-track">
@@ -125,7 +140,20 @@ export default function QuantumTunnelPage() {
               <div className="pressure-card" key={pressure.turn}>
                 <span>Turn {pressure.turn}</span>
                 <strong>{pressure.card}</strong>
-                <p>{pressure.result}</p>
+                <p>
+                  <GlossaryText
+                    terms={[
+                      "Battle",
+                      "Drain",
+                      "Echo",
+                      "Focus",
+                      "Minor Threat",
+                      "Threat",
+                      "Vigor",
+                    ]}
+                    text={pressure.result}
+                  />
+                </p>
               </div>
             ))}
           </div>
@@ -133,7 +161,9 @@ export default function QuantumTunnelPage() {
 
         <article className="gate-panel" id="gate">
           <div className="board-heading">
-            <p className="section-label">Final gate</p>
+            <p className="section-label">
+              <GlossaryTerm term="Final Gate">Final gate</GlossaryTerm>
+            </p>
             <h2>Will + Focus + Echo</h2>
           </div>
           <div className="gate-meter">
@@ -147,8 +177,26 @@ export default function QuantumTunnelPage() {
           <div className="outcome-row">
             {outcomes.map((outcome) => (
               <div className="outcome-chip" key={outcome.label}>
-                <strong>{outcome.label}</strong>
-                <span>{outcome.detail}</span>
+                <strong>
+                  {outcome.label === "Partial" ? (
+                    <GlossaryTerm term="Partial Return">Partial</GlossaryTerm>
+                  ) : outcome.label === "Full" ? (
+                    <GlossaryTerm term="Full Success">Full</GlossaryTerm>
+                  ) : (
+                    outcome.label
+                  )}
+                </strong>
+                <span>
+                  <GlossaryText
+                    terms={[
+                      "Partial Return",
+                      "Reward",
+                      "Signal Fragment",
+                      "Soul",
+                    ]}
+                    text={outcome.detail}
+                  />
+                </span>
               </div>
             ))}
           </div>
@@ -157,16 +205,40 @@ export default function QuantumTunnelPage() {
 
       <section className="loadout-zone" id="loadout" aria-label="Five-card loadout">
         <div className="board-heading">
-          <p className="section-label">Five-card loadout</p>
-          <h2>Choose the right tool, not just the strongest card.</h2>
+          <p className="section-label">
+            Five-card <GlossaryTerm term="Loadout">loadout</GlossaryTerm>
+          </p>
+          <h2>
+            Choose the right <GlossaryTerm term="Tool">tool</GlossaryTerm>, not
+            just the strongest card.
+          </h2>
         </div>
         <div className="loadout-cards">
           {loadoutCards.map((card) => (
             <article className="game-card" key={card.name}>
-              <span className="card-type">{card.type}</span>
+              <span className="card-type">
+                <GlossaryTerm term={card.type}>{card.type}</GlossaryTerm>
+              </span>
               <h3>{card.name}</h3>
-              <div className="card-stat">{card.stat}</div>
-              <p>{card.effect}</p>
+              <div className="card-stat">
+                <GlossaryTerm term={card.stat}>{card.stat}</GlossaryTerm>
+              </div>
+              <p>
+                <GlossaryText
+                  terms={[
+                    "Drain",
+                    "Echo",
+                    "Exhaust",
+                    "Final Gate",
+                    "Focus",
+                    "Minor Threat",
+                    "Pressure",
+                    "Recovery",
+                    "Threat",
+                  ]}
+                  text={card.effect}
+                />
+              </p>
             </article>
           ))}
         </div>
