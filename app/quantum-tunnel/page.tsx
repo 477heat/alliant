@@ -1,49 +1,8 @@
 import Link from "next/link";
+import { FlippableMissionCard } from "../../components/FlippableMissionCard";
+import { FlippableSoulCharacterCard } from "../../components/FlippableSoulCharacterCard";
 import { GlossaryTerm } from "../../components/GlossaryTerm";
 import { SoulDeedFeedbackGate } from "../../components/SoulDeedFeedbackGate";
-
-const sourceAttributes = [
-  { label: "Presence", value: 47 },
-  { label: "Wealth", value: 75 },
-  { label: "Fortitude", value: 103 },
-  { label: "Cunning", value: 72 },
-  { label: "Flair", value: 46 },
-  { label: "Vigor", value: 40 },
-  { label: "Kinship", value: 97 },
-  { label: "Potency", value: 62 },
-  { label: "Wisdom", value: 78 },
-  { label: "Prestige", value: 77 },
-  { label: "Influence", value: 69 },
-  { label: "Arcana", value: 91 },
-] as const;
-
-const characterStats = [
-  { label: "Body", value: "5", detail: "Vigor 40 + Fortitude 103 = 143." },
-  { label: "Resolve", value: "4", detail: "Presence 47 + Prestige 77 = 124." },
-  { label: "Focus", value: "6", modifier: "+/-1", detail: "Wisdom 78 + Arcana 91 = 169." },
-  { label: "Guile", value: "3", detail: "Cunning 72 + Flair 46 = 118." },
-  { label: "Bond", value: "6", modifier: "+/-1", detail: "Kinship 97 + Influence 69 = 166." },
-  { label: "Charge", value: "4", detail: "Potency 62 + Wealth 75 = 137." },
-] as const;
-
-const characterAttributes = [
-  { id: "western-earth", label: "Earth", value: "+/-3", use: "western resonance" },
-  { id: "chinese-earth", label: "Earth", value: "+/-3", use: "chinese resonance" },
-  { id: "kinship", label: "Kinship", value: 97, use: "support checks" },
-  { id: "potency", label: "Potency", value: 62, use: "raw force" },
-] as const;
-
-type ElementName = "Earth" | "Fire" | "Metal";
-
-function ElementGlyph({ element }: { element: ElementName }) {
-  return (
-    <span
-      aria-label={element}
-      className={`element-glyph element-glyph--${element.toLowerCase()}`}
-      role="img"
-    />
-  );
-}
 
 const tableZones = [
   {
@@ -135,7 +94,7 @@ const pressureTurns = [
     turn: "05",
     state: "hidden",
     title: "Final pressure",
-    detail: "Hidden until reached.",
+    detail: "May award an Access Marker.",
   },
 ] as const;
 
@@ -159,6 +118,15 @@ const clashes = [
   "Character Cards as dual-use modifiers vs personal Soul identity: hold this idea for later.",
 ] as const;
 
+const harmonyElements = [
+  { key: "fire", name: "Fire", harmonious: "Air + Earth" },
+  { key: "air", name: "Air", harmonious: "Fire + Metal" },
+  { key: "metal", name: "Metal", harmonious: "Air + Water" },
+  { key: "water", name: "Water", harmonious: "Metal + Wood" },
+  { key: "wood", name: "Wood", harmonious: "Water + Earth" },
+  { key: "earth", name: "Earth", harmonious: "Wood + Fire" },
+] as const;
+
 export const metadata = {
   title: "Quantum Tunnel Mock Game Room | Alliant",
   description:
@@ -180,6 +148,7 @@ export default function QuantumTunnelPage() {
           <Link href="/dictionary">Dictionary</Link>
           <Link href="#setup">Setup</Link>
           <Link href="#mission">Mission</Link>
+          <Link href="#harmony">Harmony</Link>
           <Link href="#pressure">Pressure</Link>
           <Link href="#feedback">Feedback</Link>
           <Link href="#clashes">Clashes</Link>
@@ -236,98 +205,7 @@ export default function QuantumTunnelPage() {
             </p>
             <h2>Source and playable form</h2>
           </div>
-          <div className="soul-card-pair">
-          <div className="character-card-frame soul-card-frame" aria-label="Portrait soul card example">
-            <div className="soul-core">
-              <div className="soul-sigil" aria-hidden="true">
-                SP
-              </div>
-              <div>
-                  <span className="mini-label">Source Soul / profile</span>
-                  <strong>Sweetpea</strong>
-                  <p>
-                    Western: Capricorn. Chinese: Earth Goat. Ordo Elementa:{" "}
-                    <span className="inline-element-icons">
-                      <GlossaryTerm term="Earth">
-                        <ElementGlyph element="Earth" />
-                      </GlossaryTerm>
-                      <GlossaryTerm term="Earth">
-                        <ElementGlyph element="Earth" />
-                      </GlossaryTerm>
-                    </span>
-                  </p>
-                </div>
-            </div>
-            <div className="attribute-grid">
-              {sourceAttributes.map((attribute) => (
-                <div className="attribute-tile" key={attribute.label}>
-                  <span>
-                    <GlossaryTerm term={attribute.label}>
-                      {attribute.label}
-                    </GlossaryTerm>
-                  </span>
-                  <strong>{attribute.value}</strong>
-                </div>
-              ))}
-            </div>
-          </div>
-            <div className="character-card-frame tabletop-character-card" aria-label="Playable tabletop character card example">
-              <div className="character-card-top">
-                <span className="mini-label">
-                  <GlossaryTerm term="Character Stats">Playable table card</GlossaryTerm>
-                </span>
-                <h3>Sweetpea</h3>
-                <div className="element-title-row" aria-label="Earth and Earth range-tuning scout">
-                  <GlossaryTerm term="Earth">
-                    <ElementGlyph element="Earth" />
-                  </GlossaryTerm>
-                  <GlossaryTerm term="Earth">
-                    <ElementGlyph element="Earth" />
-                  </GlossaryTerm>
-                  <span>range-tuning scout</span>
-                </div>
-              </div>
-              <div className="character-stat-list">
-                {characterStats.map((stat) => (
-                  <div className="character-stat-row" key={stat.label}>
-                    <span>{stat.label}</span>
-                    <strong>
-                      {stat.value}
-                      {"modifier" in stat ? (
-                        <>
-                          {" "}
-                          <em className="stat-modifier">{stat.modifier}</em>
-                        </>
-                      ) : null}
-                    </strong>
-                    <p>{stat.detail}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="character-attribute-strip">
-                {characterAttributes.map((attribute) => (
-                  <div className="character-attribute" key={attribute.id}>
-                    <span>
-                      {attribute.label === "Earth" ? (
-                        <GlossaryTerm term={attribute.label}>
-                          <ElementGlyph element={attribute.label} />
-                        </GlossaryTerm>
-                      ) : (
-                        <GlossaryTerm term={attribute.label}>
-                          {attribute.label}
-                        </GlossaryTerm>
-                      )}
-                    </span>
-                    <strong>{attribute.value}</strong>
-                    <em>{attribute.use}</em>
-                  </div>
-                ))}
-              </div>
-              <p className="character-card-note">
-                Stats use a 3-10 scale. Only the top two pair totals get +/-.
-              </p>
-            </div>
-          </div>
+          <FlippableSoulCharacterCard />
         </article>
 
         <article className="mission-panel" id="mission">
@@ -337,69 +215,7 @@ export default function QuantumTunnelPage() {
             </p>
             <h2>World + hidden pressure</h2>
           </div>
-          <div className="dual-mission-card" aria-label="Dual-use mission card example">
-            <div className="mission-half mission-half--top">
-              <span className="mini-label">
-                Top half / <GlossaryTerm term="Mission">mission</GlossaryTerm>
-              </span>
-              <h3>Glass Orchard</h3>
-              <dl className="mission-facts mission-facts--dense">
-                <div>
-                  <dt>
-                    <GlossaryTerm term="World Resonance">Resonance</GlossaryTerm>
-                  </dt>
-                  <dd>Wood (Water, Earth)</dd>
-                </div>
-                <div>
-                  <dt>
-                    <GlossaryTerm term="Checked Attributes">Check</GlossaryTerm>
-                  </dt>
-                  <dd>Body + Focus + Bond</dd>
-                </div>
-                <div>
-                  <dt>
-                    <GlossaryTerm term="Target Range">Range</GlossaryTerm>
-                  </dt>
-                  <dd>14-20 Easy</dd>
-                </div>
-                <div>
-                  <dt>
-                    <GlossaryTerm term="Pressure Count">Pressure</GlossaryTerm>
-                  </dt>
-                  <dd>5</dd>
-                </div>
-                <div>
-                  <dt>Loadout</dt>
-                  <dd>3 active Items</dd>
-                </div>
-                <div>
-                  <dt>
-                    <GlossaryTerm term="Item Allowance">Allowance</GlossaryTerm>
-                  </dt>
-                  <dd>Tool = draw 1 Item</dd>
-                </div>
-                <div>
-                  <dt>
-                    <GlossaryTerm term="Access Marker">Reward</GlossaryTerm>
-                  </dt>
-                  <dd>Wood Mark</dd>
-                </div>
-              </dl>
-            </div>
-            <div className="mission-divider" aria-hidden="true" />
-            <div className="mission-half mission-half--bottom">
-              <div className="modifier-rotated">
-                <span className="mini-label">
-                  Bottom half / pressure-modifier
-                </span>
-                <h3>Signal Static</h3>
-                <p>
-                  Pressure Stat: Focus. Requirement: block 1 Drain or lose 1
-                  Focus. Advance after resolving.
-                </p>
-              </div>
-            </div>
-          </div>
+          <FlippableMissionCard />
           <div className="modifier-rule">
             <strong>Access check</strong>
             <p>
@@ -440,6 +256,59 @@ export default function QuantumTunnelPage() {
             </div>
           </div>
         </article>
+      </section>
+
+      <section className="harmony-zone" id="harmony" aria-label="Harmonious element diagram">
+        <div className="board-heading">
+          <p className="section-label">
+            <GlossaryTerm term="Harmonious Access">Harmonious access</GlossaryTerm>
+          </p>
+          <h2>Element harmony map</h2>
+        </div>
+        <div className="harmony-layout">
+          <div className="harmony-ring" aria-label="Provisional six-element harmony ring">
+            <div className="harmony-ring__track" aria-hidden="true" />
+            <div className="harmony-ring__core">
+              <span>World</span>
+              <strong>Resonance</strong>
+            </div>
+            {harmonyElements.map((element) => (
+              <article
+                className={`harmony-node harmony-node--${element.key}`}
+                key={element.key}
+              >
+                <strong>{element.name}</strong>
+                <span>{element.harmonious}</span>
+              </article>
+            ))}
+          </div>
+          <article className="harmony-example-card">
+            <span className="mini-label">Mission notation test</span>
+            <h3>Wood (Water, Earth)</h3>
+            <div className="harmony-access-grid" aria-label="Wood world access example">
+              <div className="harmony-access-card harmony-access-card--direct">
+                <span>Direct</span>
+                <strong>Wood</strong>
+                <p>Same element. May attempt the World.</p>
+              </div>
+              <div className="harmony-access-card harmony-access-card--harmonious">
+                <span>Harmonious</span>
+                <strong>Water / Earth</strong>
+                <p>Compatible entry. Less control than direct resonance.</p>
+              </div>
+              <div className="harmony-access-card harmony-access-card--blocked">
+                <span>Bridge needed</span>
+                <strong>Fire / Air / Metal</strong>
+                <p>Needs a Mark, Item, Creature, or prior unlock.</p>
+              </div>
+            </div>
+            <p>
+              Read the parentheses as the two elements that can enter without
+              matching the World exactly. The exact full chart is still being
+              tested.
+            </p>
+          </article>
+        </div>
       </section>
 
       <section className="pressure-zone" id="pressure" aria-label="Hidden pressure turns">
