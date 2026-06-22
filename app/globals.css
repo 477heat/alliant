@@ -676,6 +676,31 @@ h1 {
 }
 
 .soul-deed-gate {
+  left: 1rem;
+  position: fixed;
+  top: 4.75rem;
+  z-index: 45;
+}
+
+.feedback-launch-button {
+  background: rgba(53, 255, 136, 0.14);
+  border: 1px solid rgba(53, 255, 136, 0.48);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 900;
+  min-height: 2rem;
+  padding: 0.42rem 0.62rem;
+  text-transform: uppercase;
+}
+
+.feedback-launch-button:hover,
+.feedback-launch-button[aria-expanded="true"] {
+  background: rgba(53, 255, 136, 0.24);
+}
+
+.feedback-popover {
   background:
     linear-gradient(135deg, rgba(53, 255, 136, 0.08), rgba(244, 201, 107, 0.04), rgba(0, 0, 0, 0.78)),
     var(--panel-deep);
@@ -685,9 +710,38 @@ h1 {
   clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
   display: grid;
   gap: 0.85rem;
-  margin: 0 auto 1rem;
-  max-width: 1180px;
+  margin-top: 0.5rem;
+  max-height: calc(100vh - 7.5rem);
+  overflow: auto;
   padding: 1rem;
+  width: min(28rem, calc(100vw - 2rem));
+}
+
+.feedback-popover__header {
+  align-items: start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.feedback-popover__header h2 {
+  color: #fff;
+  font-size: 1.25rem;
+  line-height: 1;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.feedback-popover__header button {
+  background: rgba(0, 0, 0, 0.38);
+  border: 1px solid rgba(139, 247, 255, 0.2);
+  color: rgba(236, 254, 255, 0.76);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.62rem;
+  font-weight: 900;
+  padding: 0.4rem 0.52rem;
+  text-transform: uppercase;
 }
 
 .gate-access-panel {
@@ -752,6 +806,7 @@ h1 {
   background: rgba(53, 255, 136, 0.2);
 }
 
+.gate-access-explainer,
 .gate-locked-note {
   border: 1px solid rgba(244, 201, 107, 0.24);
   display: grid;
@@ -759,9 +814,17 @@ h1 {
   padding: 0.85rem;
 }
 
+.gate-access-explainer strong,
 .gate-locked-note strong {
   color: var(--gold);
   text-transform: uppercase;
+}
+
+.gate-access-explainer p {
+  color: rgba(236, 254, 255, 0.7);
+  font-size: 0.9rem;
+  line-height: 1.45;
+  margin: 0;
 }
 
 .gate-locked-note a {
@@ -1787,6 +1850,16 @@ h1 {
   .gate-access-panel,
   .feedback-form {
     grid-template-columns: 1fr;
+  }
+
+  .soul-deed-gate {
+    left: 0.75rem;
+    top: 4.5rem;
+  }
+
+  .feedback-popover {
+    max-height: calc(100vh - 7rem);
+    width: calc(100vw - 1.5rem);
   }
 
   .mission-track,

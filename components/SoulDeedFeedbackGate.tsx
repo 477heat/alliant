@@ -81,7 +81,8 @@ export function SoulDeedFeedbackGate() {
   const [message, setMessage] = useState("");
   const [category, setCategory] = useState<FeedbackCategory>("rules");
   const [rating, setRating] = useState("4");
-  const [notice, setNotice] = useState("Connect the wallet that holds your Soul Deed.");
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [notice, setNotice] = useState("Soul Deed holders can leave playtest feedback.");
 
   async function connectAndCheck() {
     const provider = getWalletProvider();
@@ -197,72 +198,103 @@ export function SoulDeedFeedbackGate() {
 
   return (
     <section className="soul-deed-gate" id="feedback" aria-label="Soul Deed feedback gate">
-      <div className="board-heading">
-        <p className="section-label">Soul Deed feedback gate</p>
-        <h2>Holder Idea Box</h2>
-      </div>
-      <div className="gate-access-panel">
-        <div>
-          <span>Access</span>
-          <strong>{walletLabel}</strong>
-          <p>{notice}</p>
-        </div>
-        <button type="button" onClick={connectAndCheck} disabled={status === "checking" || status === "submitting"}>
-          {status === "checking" ? "Checking" : walletAddress ? "Recheck Soul Deed" : "Connect Wallet"}
-        </button>
-      </div>
+      <button
+        aria-controls="feedback-popover"
+        aria-expanded={isPanelOpen}
+        className="feedback-launch-button"
+        onClick={() => setIsPanelOpen((isOpen) => !isOpen)}
+        type="button"
+      >
+        Feedback
+      </button>
 
-      {status === "locked" ? (
-        <div className="gate-locked-note">
-          <strong>Soul Deed access required.</strong>
-          <p>
-            Feedback submissions are open to wallets that currently hold a Soul Deed. If the Deed is in another wallet,
-            connect that one.
-          </p>
-          <a href="https://www.sovengine.xyz/portal">Enter Sovereign Engine</a>
-        </div>
-      ) : null}
+      {isPanelOpen ? (
+        <div className="feedback-popover" id="feedback-popover" role="dialog" aria-labelledby="feedback-popover-title">
+          <div className="feedback-popover__header">
+            <div>
+              <p className="section-label">Soul Deed feedback gate</p>
+              <h2 id="feedback-popover-title">Holder Idea Box</h2>
+            </div>
+            <button type="button" onClick={() => setIsPanelOpen(false)}>
+              Close
+            </button>
+          </div>
 
-      {isEligible ? (
-        <form className="feedback-form" onSubmit={submitFeedback}>
-          <label>
-            <span>Idea type</span>
-            <select value={category} onChange={(event) => setCategory(event.target.value as FeedbackCategory)}>
-              {feedbackCategories.map((option) => (
-                <option key={option} value={option}>
-                  {categoryLabels[option]}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            <span>Rating</span>
-            <select value={rating} onChange={(event) => setRating(event.target.value)}>
-              <option value="5">5</option>
-              <option value="4">4</option>
-              <option value="3">3</option>
-              <option value="2">2</option>
-              <option value="1">1</option>
-            </select>
-          </label>
-          <label className="feedback-form__message">
-            <span>Feedback</span>
-            <textarea
-              maxLength={1200}
-              minLength={12}
-              onChange={(event) => setMessage(event.target.value)}
-              placeholder="Leave a rule, card, balance, story, or visual idea."
-              value={message}
-            />
-          </label>
-          <p>
-            Submitting stores your wallet address with your message. Never enter seed phrases, private keys, or personal
-            financial details.
-          </p>
-          <button type="submit" disabled={status === "submitting"}>
-            {status === "submitting" ? "Submitting" : "Submit Feedback"}
-          </button>
-        </form>
+          {!isEligible ? (
+            <div className="gate-access-explainer">
+              <strong>Community access requirement</strong>
+              <p>
+                Quantum Tunnel feedback is reserved for Soul Deed holders because the physical card game is being built
+                from the same Digital Character Engine. The cards, stats, and balance tests come from the profiles of
+                people already inside that Engine, so early feedback stays close to the community the game is based on.
+              </p>
+            </div>
+          ) : null}
+
+          <div className="gate-access-panel">
+            <div>
+              <span>Access</span>
+              <strong>{walletLabel}</strong>
+              <p>{notice}</p>
+            </div>
+            <button type="button" onClick={connectAndCheck} disabled={status === "checking" || status === "submitting"}>
+              {status === "checking" ? "Checking" : walletAddress ? "Recheck Soul Deed" : "Check Soul Deed"}
+            </button>
+          </div>
+
+          {status === "locked" ? (
+            <div className="gate-locked-note">
+              <strong>Soul Deed access required.</strong>
+              <p>
+                Feedback submissions are open to wallets that currently hold a Soul Deed. If the Deed is in another
+                wallet, connect that one.
+              </p>
+              <a href="https://www.sovengine.xyz/portal">Enter Sovereign Engine</a>
+            </div>
+          ) : null}
+
+          {isEligible ? (
+            <form className="feedback-form" onSubmit={submitFeedback}>
+              <label>
+                <span>Idea type</span>
+                <select value={category} onChange={(event) => setCategory(event.target.value as FeedbackCategory)}>
+                  {feedbackCategories.map((option) => (
+                    <option key={option} value={option}>
+                      {categoryLabels[option]}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                <span>Rating</span>
+                <select value={rating} onChange={(event) => setRating(event.target.value)}>
+                  <option value="5">5</option>
+                  <option value="4">4</option>
+                  <option value="3">3</option>
+                  <option value="2">2</option>
+                  <option value="1">1</option>
+                </select>
+              </label>
+              <label className="feedback-form__message">
+                <span>Feedback</span>
+                <textarea
+                  maxLength={1200}
+                  minLength={12}
+                  onChange={(event) => setMessage(event.target.value)}
+                  placeholder="Leave a rule, card, balance, story, or visual idea."
+                  value={message}
+                />
+              </label>
+              <p>
+                Submitting stores your wallet address with your message. Never enter seed phrases, private keys, or
+                personal financial details.
+              </p>
+              <button type="submit" disabled={status === "submitting"}>
+                {status === "submitting" ? "Submitting" : "Submit Feedback"}
+              </button>
+            </form>
+          ) : null}
+        </div>
       ) : null}
     </section>
   );
