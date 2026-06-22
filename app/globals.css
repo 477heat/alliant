@@ -1007,6 +1007,8 @@ h1 {
   justify-items: start;
   max-width: 100%;
   perspective: 1200px;
+  scale: 0.75;
+  transform-origin: top left;
   width: var(--qt-card-short);
 }
 
@@ -1596,7 +1598,7 @@ h1 {
 
 .mission-half h3 {
   color: #fff;
-  font-size: clamp(1.3rem, 3vw, 2rem);
+  font-size: clamp(1.25rem, 2.25vw, 1.5625rem);
   line-height: 0.95;
   margin: 0;
   text-transform: uppercase;
