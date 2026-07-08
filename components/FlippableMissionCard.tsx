@@ -57,9 +57,9 @@ export function FlippableMissionCard() {
                 </div>
                 <div>
                   <dt>
-                    <GlossaryTerm term="Target Range">Target</GlossaryTerm>
+                    <GlossaryTerm term="Target Type">Target</GlossaryTerm>
                   </dt>
-                  <dd>14-20 Easy</dd>
+                  <dd>Range 14-20</dd>
                 </div>
                 <div>
                   <dt>

@@ -121,8 +121,10 @@ export const glossary = {
     "The root identity behind generated characters, items, and creatures. Different forms can express the same source soul in different ways.",
   Stat:
     "A number on the character card. Stats show what the character is good at.",
+  "Target Type":
+    "The kind of mission target being checked. The locked types are Range, Surpass, and Precise.",
   "Target Range":
-    "The mission success window. A total that is too low undershoots, while a total that is too high overshoots.",
+    "A Range target. The final total must land inside the printed window; too low undershoots and too high overshoots.",
   Threat:
     "An enemy, hazard, or danger created by the mission.",
   Tool:

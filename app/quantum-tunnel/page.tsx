@@ -8,7 +8,7 @@ const tableZones = [
   {
     label: "Phone",
     title: "Site-generated character",
-    detail: "Sweetpea comes from the player's Source Soul, not a shuffled deck.",
+    detail: "Characters come from the player's Source Soul, not a shuffled deck.",
   },
   {
     label: "Deck 01",
@@ -102,11 +102,29 @@ const workingIdeas = [
   "The site generates the Character Card from the Source Soul.",
   "The paper table uses two active decks: Mission and Item.",
   "Missions show World Resonance with two harmonious elements in parentheses.",
-  "Mission success uses a target range, not highest number wins.",
+  "Mission success uses one of three Target types: Range, Surpass, or Precise.",
   "Pressure count is public, but pressure details reveal one at a time.",
   "Items, Missions, and Characters share the same source attribute vocabulary.",
   "Character carry limit and Mission active loadout can be separate numbers.",
   "Gained inventory is riskier than the Character's stable carry slots.",
+] as const;
+
+const targetTypes = [
+  {
+    label: "Range",
+    detail: "Land inside the printed window.",
+    example: "14-20",
+  },
+  {
+    label: "Surpass",
+    detail: "Meet or beat the printed number.",
+    example: "18+",
+  },
+  {
+    label: "Precise",
+    detail: "Hit the printed number exactly.",
+    example: "17",
+  },
 ] as const;
 
 const clashes = [
@@ -146,6 +164,7 @@ export default function QuantumTunnelPage() {
         <nav className="project-nav" aria-label="Playtest navigation">
           <Link href="/">Home</Link>
           <Link href="/dictionary">Dictionary</Link>
+          <Link href="/table-lab">Table Lab</Link>
           <Link href="#setup">Setup</Link>
           <Link href="#mission">Mission</Link>
           <Link href="#harmony">Harmony</Link>
@@ -165,7 +184,7 @@ export default function QuantumTunnelPage() {
           <GlossaryTerm term="Character Card">Character Card</GlossaryTerm>, the
           table uses a <GlossaryTerm term="Mission Deck">Mission deck</GlossaryTerm>{" "}
           and an <GlossaryTerm term="Item Deck">Item deck</GlossaryTerm>, and
-          the run is decided by <GlossaryTerm term="Target Range">target ranges</GlossaryTerm>{" "}
+          the run is decided by <GlossaryTerm term="Target Type">target types</GlossaryTerm>{" "}
           plus <GlossaryTerm term="Tuning">tuning</GlossaryTerm>.
         </p>
       </section>
@@ -229,31 +248,26 @@ export default function QuantumTunnelPage() {
         <article className="gate-panel" id="gate">
           <div className="board-heading">
             <p className="section-label">
-              <GlossaryTerm term="Target Range">Target range</GlossaryTerm>
+              <GlossaryTerm term="Target Type">Target types</GlossaryTerm>
             </p>
-            <h2>Fit the World</h2>
+            <h2>Three ways to pass</h2>
           </div>
           <div className="gate-meter">
             <span>14</span>
             <div className="gate-window">
-              <span>easy range</span>
+              <span>Range example</span>
             </div>
             <span>20</span>
           </div>
           <p className="gate-total">5 + 6 + 6 = 17</p>
           <div className="tuning-stack" aria-label="Tuning math example">
-            <div>
-              <span>Raw force</span>
-              <strong>Body + Focus + Bond</strong>
-            </div>
-            <div>
-              <span>Hard range</span>
-              <strong>16-18</strong>
-            </div>
-            <div>
-              <span>Absolute target</span>
-              <strong>17 exactly</strong>
-            </div>
+            {targetTypes.map((target) => (
+              <div key={target.label}>
+                <span>{target.label}</span>
+                <strong>{target.example}</strong>
+                <p>{target.detail}</p>
+              </div>
+            ))}
           </div>
         </article>
       </section>

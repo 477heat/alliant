@@ -9,16 +9,16 @@ const projects = [
     body: "A visual table layout for testing Quantum Tunnel cards, missions, battle pressure, and gate checks.",
   },
   {
+    name: "Board-Pieces",
+    href: "/board-pieces",
+    signal: "Room editor",
+    body: "A scaled board for placing measured room shapes and freely moving rotated pieces.",
+  },
+  {
     name: "Sovereign Engine",
     href: "https://sovengine.xyz",
     signal: "Verified origin",
-    body: "A command layer for human-linked ownership, access, attributes, and future progeny projects.",
-  },
-  {
-    name: "SoulMaster",
-    href: "https://soulmaster.xyz",
-    signal: "Creator tools",
-    body: "A path for shaping, packaging, and extending original work into usable creator assets.",
+    body: "A Web3 character engine that uses astrology and EAS verification for proof of personhood, turning verified origin data into characters and future progeny projects.",
   },
   {
     name: "Anthologies",
@@ -53,7 +53,7 @@ export default function Home() {
           <p className="hero-lede">
             Alliant builds connected projects that help creators keep ownership
             of their work and turn original ideas into durable passive-income
-            paths.
+            paths, powered by Web3.
           </p>
         </div>
 
@@ -90,10 +90,10 @@ export default function Home() {
           <h2>Built for creators who want their work to keep working.</h2>
         </div>
         <p>
-          Sovereign Engine, SoulMaster, and Anthologies each approach the same
-          mission from a different angle: identity, tooling, and story. Together
-          they form an ecosystem for keeping the source of creation visible,
-          useful, and able to create income over time.
+          Sovereign Engine and Anthologies approach the same mission from two
+          angles: identity-driven creation and story. Together they form an
+          ecosystem for keeping the source of creation visible, useful, and able
+          to create income over time.
         </p>
       </section>
 
