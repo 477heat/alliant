@@ -1,5 +1,6 @@
 export type TableMode = "builder" | "game";
 export type BuilderEditTarget = "table" | "card";
+export type BoardLayoutShape = "rectangle" | "square" | "octagon";
 export type CardFace = "front" | "back";
 export type CardKind = "mission" | "item" | "character";
 export type CellCardKind = CardKind | "any";

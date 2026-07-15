@@ -1,4 +1,5 @@
 import type {
+  BoardLayoutShape,
   BuilderEditTarget,
   CardEffect,
   CellConfig,
@@ -10,11 +11,15 @@ import type {
 import { MAX_GRID_SIZE, clampGridSize } from "./rules";
 
 type BuilderInspectorProps = {
+  boardLayout: BoardLayoutShape;
   builderEditTarget: BuilderEditTarget;
+  clearMultiCellSelection: () => void;
   cols: number;
   rows: number;
   selectedCard: LabCard | null;
   selectedCell: CellConfig | undefined;
+  selectedCellCount: number;
+  setBoardLayout: (layout: BoardLayoutShape) => void;
   setBuilderEditTarget: (target: BuilderEditTarget) => void;
   setCols: (cols: number) => void;
   setRows: (rows: number) => void;
@@ -65,11 +70,15 @@ const ruleLabels: Array<{
 
 export function BuilderInspector({
   assignSelectedCellRole,
+  boardLayout,
   builderEditTarget,
+  clearMultiCellSelection,
   cols,
   rows,
   selectedCard,
   selectedCell,
+  selectedCellCount,
+  setBoardLayout,
   setBuilderEditTarget,
   setCols,
   setRows,
@@ -81,6 +90,21 @@ export function BuilderInspector({
 }: BuilderInspectorProps) {
   function updateRule(key: keyof TableRulesConfig, value: boolean) {
     setTableRules({ ...tableRules, [key]: value });
+  }
+
+  function updateBoardLayout(nextLayout: BoardLayoutShape) {
+    setBoardLayout(nextLayout);
+    if (nextLayout !== "rectangle") {
+      const nextSize = clampGridSize(Math.max(rows, cols));
+      setRows(nextSize);
+      setCols(nextSize);
+    }
+  }
+
+  function updateSquareSize(value: number) {
+    const nextSize = clampGridSize(value);
+    setRows(nextSize);
+    setCols(nextSize);
   }
 
   return (
@@ -109,34 +133,74 @@ export function BuilderInspector({
         <>
           <section>
             <h2>Table shape</h2>
+            <label>
+              Board layout
+              <select
+                value={boardLayout}
+                onChange={(event) => updateBoardLayout(event.target.value as BoardLayoutShape)}
+              >
+                <option value="rectangle">Rectangle</option>
+                <option value="square">Square</option>
+                <option value="octagon">Octagon</option>
+              </select>
+            </label>
             <div className="table-lab-field-row">
-              <label>
-                Rows
-                <input
-                  max={MAX_GRID_SIZE}
-                  min="1"
-                  type="number"
-                  value={rows}
-                  onChange={(event) => setRows(clampGridSize(Number(event.target.value)))}
-                />
-              </label>
-              <label>
-                Columns
-                <input
-                  max={MAX_GRID_SIZE}
-                  min="1"
-                  type="number"
-                  value={cols}
-                  onChange={(event) => setCols(clampGridSize(Number(event.target.value)))}
-                />
-              </label>
+              {boardLayout === "rectangle" ? (
+                <>
+                  <label>
+                    Rows
+                    <input
+                      max={MAX_GRID_SIZE}
+                      min="1"
+                      type="number"
+                      value={rows}
+                      onChange={(event) => setRows(clampGridSize(Number(event.target.value)))}
+                    />
+                  </label>
+                  <label>
+                    Columns
+                    <input
+                      max={MAX_GRID_SIZE}
+                      min="1"
+                      type="number"
+                      value={cols}
+                      onChange={(event) => setCols(clampGridSize(Number(event.target.value)))}
+                    />
+                  </label>
+                </>
+              ) : (
+                <label className="table-lab-field-row__wide">
+                  Size
+                  <input
+                    max={MAX_GRID_SIZE}
+                    min="1"
+                    type="number"
+                    value={Math.max(rows, cols)}
+                    onChange={(event) => updateSquareSize(Number(event.target.value))}
+                  />
+                </label>
+              )}
             </div>
           </section>
 
           <section>
-            <h2>Selected cell</h2>
+            <h2>Selected cells</h2>
             {selectedCell ? (
               <>
+                <p className="table-lab-note">
+                  {selectedCellCount > 1
+                    ? `${selectedCellCount} cells selected. Edits below apply to all selected cells.`
+                    : "1 cell selected. Shift-click, Cmd-click, or Ctrl-click cells to select more."}
+                </p>
+                {selectedCellCount > 1 ? (
+                  <button
+                    className="table-lab-button table-lab-button--ghost"
+                    type="button"
+                    onClick={clearMultiCellSelection}
+                  >
+                    Edit one cell
+                  </button>
+                ) : null}
                 <label>
                   Label
                   <input
@@ -152,7 +216,7 @@ export function BuilderInspector({
                       type="checkbox"
                       onChange={(event) => updateSelectedCell({ locked: event.target.checked })}
                     />
-                    Locked
+                    Unused
                   </label>
                   <label>
                     <input

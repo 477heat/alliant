@@ -3,6 +3,7 @@
 import {
   type ChangeEvent,
   type DragEvent,
+  type MouseEvent,
   useEffect,
   useMemo,
   useRef,
@@ -31,6 +32,7 @@ import {
   shuffleIds,
 } from "./table-lab/rules";
 import type {
+  BoardLayoutShape,
   BuilderEditTarget,
   CardEffect,
   CellConfig,
@@ -43,9 +45,60 @@ import type {
   TableMode,
 } from "./table-lab/types";
 
+function isCellInBoardLayout(
+  id: string,
+  rows: number,
+  cols: number,
+  boardLayout: BoardLayoutShape,
+) {
+  if (boardLayout !== "octagon") return true;
+
+  const [row, col] = id.split("-").map(Number);
+  if (!Number.isFinite(row) || !Number.isFinite(col)) return false;
+
+  const size = Math.min(rows, cols);
+  const cornerCut = size < 4 ? 0 : Math.max(1, Math.floor(size / 4));
+  const lastRow = rows - 1;
+  const lastCol = cols - 1;
+
+  return (
+    row + col >= cornerCut &&
+    row + (lastCol - col) >= cornerCut &&
+    (lastRow - row) + col >= cornerCut &&
+    (lastRow - row) + (lastCol - col) >= cornerCut
+  );
+}
+
+function isBoardLayoutShape(value: unknown): value is BoardLayoutShape {
+  return value === "rectangle" || value === "square" || value === "octagon";
+}
+
+function normalizeBoardDimensions(
+  boardLayout: BoardLayoutShape,
+  nextRows: number,
+  nextCols: number,
+) {
+  const rows = clampGridSize(nextRows);
+  const cols = clampGridSize(nextCols);
+
+  if (boardLayout === "rectangle") {
+    return { rows, cols };
+  }
+
+  const size = clampGridSize(Math.max(rows, cols));
+  return { rows: size, cols: size };
+}
+
+function normalizeSelectedCellIds(cellIds?: string[], fallbackCellId = cellId(2, 3)) {
+  const ids = Array.isArray(cellIds) && cellIds.length > 0 ? cellIds : [fallbackCellId];
+  const normalized = [...new Set(ids.filter(Boolean))];
+  return normalized.length > 0 ? normalized : [cellId(2, 3)];
+}
+
 export function TableLab() {
   const initial = useMemo(() => makeInitialCells(), []);
   const [mode, setMode] = useState<TableMode>("builder");
+  const [boardLayout, setBoardLayout] = useState<BoardLayoutShape>("square");
   const [rows, setRows] = useState(8);
   const [cols, setCols] = useState(8);
   const [builderEditTarget, setBuilderEditTarget] = useState<BuilderEditTarget>("table");
@@ -55,6 +108,7 @@ export function TableLab() {
   const [cellConfigs, setCellConfigs] = useState(initial.configs);
   const [cellStates, setCellStates] = useState(initial.states);
   const [selectedCellId, setSelectedCellId] = useState(cellId(2, 3));
+  const [selectedCellIds, setSelectedCellIds] = useState<string[]>([cellId(2, 3)]);
   const [selectedCardId, setSelectedCardId] = useState("glass-orchard");
   const [log, setLog] = useState<string[]>([
     "Table Lab loaded with Quantum Tunnel as a sample preset.",
@@ -63,12 +117,16 @@ export function TableLab() {
 
   const selectedCard = selectedCardId ? cards[selectedCardId] : null;
   const selectedCell = cellConfigs[selectedCellId];
+  const selectedCells = useMemo(
+    () => selectedCellIds.map((id) => cellConfigs[id]).filter(Boolean),
+    [cellConfigs, selectedCellIds],
+  );
   const characterCards = useMemo(
     () => Object.values(cards).filter((card) => inferCardKind(card) === "character"),
     [cards],
   );
 
-  const visibleCellIds = useMemo(() => {
+  const boardCellIds = useMemo(() => {
     const ids: string[] = [];
     for (let row = 0; row < rows; row += 1) {
       for (let col = 0; col < cols; col += 1) {
@@ -77,6 +135,16 @@ export function TableLab() {
     }
     return ids;
   }, [cols, rows]);
+
+  const activeBoardCellIds = useMemo(
+    () => boardCellIds.filter((id) => isCellInBoardLayout(id, rows, cols, boardLayout)),
+    [boardCellIds, boardLayout, cols, rows],
+  );
+
+  const activeBoardCellIdSet = useMemo(
+    () => new Set(activeBoardCellIds),
+    [activeBoardCellIds],
+  );
 
   useEffect(() => {
     const stored = window.localStorage.getItem(STORAGE_KEY);
@@ -92,12 +160,14 @@ export function TableLab() {
         cellStates?: Record<string, CellState>;
         cols?: number;
         decks?: Record<string, LabDeck>;
+        boardLayout?: BoardLayoutShape;
         builderEditTarget?: BuilderEditTarget;
         log?: string[];
         mode?: TableMode;
         rows?: number;
         selectedCardId?: string;
         selectedCellId?: string;
+        selectedCellIds?: string[];
         tableRules?: TableRulesConfig;
       };
 
@@ -106,14 +176,29 @@ export function TableLab() {
         if (parsed.decks) setDecks(parsed.decks);
         if (parsed.cellConfigs) setCellConfigs(normalizeCellConfigs(parsed.cellConfigs, parsed.cellStates));
         if (parsed.cellStates) setCellStates(parsed.cellStates);
+        const nextBoardLayout = isBoardLayoutShape(parsed.boardLayout)
+          ? parsed.boardLayout
+          : "square";
+        const nextDimensions = normalizeBoardDimensions(
+          nextBoardLayout,
+          parsed.rows ?? 8,
+          parsed.cols ?? 8,
+        );
+
+        setBoardLayout(nextBoardLayout);
+        setRows(nextDimensions.rows);
+        setCols(nextDimensions.cols);
         if (parsed.builderEditTarget === "table" || parsed.builderEditTarget === "card") {
           setBuilderEditTarget(parsed.builderEditTarget);
         }
-        if (parsed.rows) setRows(clampGridSize(parsed.rows));
-        if (parsed.cols) setCols(clampGridSize(parsed.cols));
         if (parsed.mode === "builder" || parsed.mode === "game") setMode(parsed.mode);
         if (parsed.selectedCardId) setSelectedCardId(parsed.selectedCardId);
-        if (parsed.selectedCellId) setSelectedCellId(parsed.selectedCellId);
+        const nextSelectedCellIds = normalizeSelectedCellIds(
+          parsed.selectedCellIds,
+          parsed.selectedCellId,
+        );
+        setSelectedCellId(nextSelectedCellIds[0]);
+        setSelectedCellIds(nextSelectedCellIds);
         if (parsed.tableRules) setTableRules({ ...initialTableRules, ...parsed.tableRules });
         if (parsed.log) setLog(parsed.log.slice(0, 8));
         storageLoadedRef.current = true;
@@ -135,17 +220,20 @@ export function TableLab() {
         cellStates,
         cols,
         decks,
+        boardLayout,
         builderEditTarget,
         log,
         mode,
         rows,
         selectedCardId,
         selectedCellId,
+        selectedCellIds,
         tableRules,
       }),
     );
   }, [
     builderEditTarget,
+    boardLayout,
     cards,
     cellConfigs,
     cellStates,
@@ -156,6 +244,7 @@ export function TableLab() {
     rows,
     selectedCardId,
     selectedCellId,
+    selectedCellIds,
     tableRules,
   ]);
 
@@ -163,11 +252,42 @@ export function TableLab() {
     setLog((current) => [message, ...current].slice(0, 8));
   }
 
+  function selectSingleCell(id: string) {
+    setSelectedCellId(id);
+    setSelectedCellIds([id]);
+  }
+
+  function clearMultiCellSelection() {
+    selectSingleCell(selectedCellId);
+  }
+
+  function handleCellClick(event: MouseEvent<HTMLDivElement>, id: string) {
+    if (mode !== "builder" || (!event.shiftKey && !event.metaKey && !event.ctrlKey)) {
+      selectSingleCell(id);
+      return;
+    }
+
+    const isAlreadySelected = selectedCellIds.includes(id);
+    const nextSelectedCellIds =
+      isAlreadySelected && selectedCellIds.length > 1
+        ? selectedCellIds.filter((selectedId) => selectedId !== id)
+        : isAlreadySelected
+          ? selectedCellIds
+          : [...selectedCellIds, id];
+
+    setSelectedCellIds(nextSelectedCellIds);
+    setSelectedCellId(isAlreadySelected ? nextSelectedCellIds[0] : id);
+  }
+
   function updateSelectedCell(patch: Partial<CellConfig>) {
-    if (!selectedCell) return;
+    if (selectedCells.length === 0) return;
     setCellConfigs((current) => ({
       ...current,
-      [selectedCell.id]: { ...selectedCell, ...patch },
+      ...Object.fromEntries(
+        selectedCellIds
+          .filter((id) => current[id])
+          .map((id) => [id, { ...current[id], ...patch }]),
+      ),
     }));
   }
 
@@ -193,26 +313,37 @@ export function TableLab() {
   }
 
   function assignSelectedCellRole(role: CellRole) {
-    if (!selectedCell) return;
+    if (selectedCells.length === 0) return;
 
     const roleDefaults = configForCellRole(role);
     const deckId = deckIdForKind(roleDefaults.deckKind ?? "none");
     const defaultLabel = defaultLabelForRole(role);
-    const shouldReplaceLabel =
-      !selectedCell.label ||
-      selectedCell.label === defaultLabelForRole(selectedCell.cellRole) ||
-      selectedCell.label === "Mission Deck" ||
-      selectedCell.label === "Item Deck" ||
-      selectedCell.label === "Discard Pile";
 
-    setCellConfigs((current) => ({
-      ...current,
-      [selectedCell.id]: {
-        ...current[selectedCell.id],
-        ...roleDefaults,
-        label: shouldReplaceLabel ? defaultLabel : current[selectedCell.id].label,
-      },
-    }));
+    setCellConfigs((current) => {
+      const next = { ...current };
+
+      selectedCellIds.forEach((id) => {
+        const currentConfig = next[id];
+        if (!currentConfig) return;
+
+        const shouldReplaceLabel =
+          !currentConfig.label ||
+          currentConfig.label === defaultLabelForRole(currentConfig.cellRole) ||
+          currentConfig.label === "Mission Deck" ||
+          currentConfig.label === "Item Deck" ||
+          currentConfig.label === "Discard Pile" ||
+          currentConfig.label === "Locked" ||
+          currentConfig.label === "Unused";
+
+        next[id] = {
+          ...currentConfig,
+          ...roleDefaults,
+          label: shouldReplaceLabel ? defaultLabel : currentConfig.label,
+        };
+      });
+
+      return next;
+    });
 
     setCellStates((current) => {
       const nextStates = { ...current };
@@ -226,18 +357,23 @@ export function TableLab() {
         };
       });
 
-      nextStates[selectedCell.id] = {
-        ...nextStates[selectedCell.id],
-        deckIds: deckId ? [deckId] : [],
-        cardIds: deckId
-          ? []
-          : nextStates[selectedCell.id].cardIds.filter((cardId) => {
-              const card = cards[cardId];
-              if (!card) return false;
-              const targetKind = roleDefaults.cardKind ?? "mission";
-              return targetKind === "any" || inferCardKind(card) === targetKind;
-            }),
-      };
+      selectedCellIds.forEach((id, index) => {
+        const currentState = nextStates[id];
+        if (!currentState) return;
+
+        nextStates[id] = {
+          ...currentState,
+          deckIds: deckId && index === 0 ? [deckId] : [],
+          cardIds: deckId
+            ? []
+            : currentState.cardIds.filter((cardId) => {
+                const card = cards[cardId];
+                if (!card) return false;
+                const targetKind = roleDefaults.cardKind ?? "mission";
+                return targetKind === "any" || inferCardKind(card) === targetKind;
+              }),
+        };
+      });
 
       return nextStates;
     });
@@ -274,7 +410,12 @@ export function TableLab() {
   }
 
   function cellIsVisible(id: string) {
-    return visibleCellIds.includes(id);
+    const state = cellStates[id];
+    return Boolean(
+      activeBoardCellIdSet.has(id) ||
+        state?.cardIds.length ||
+        state?.deckIds.length,
+    );
   }
 
   function expandGridToCell(id: string) {
@@ -302,12 +443,12 @@ export function TableLab() {
     }
 
     expandGridToCell(locationId);
-    setSelectedCellId(locationId);
+    selectSingleCell(locationId);
     addLog(`${cards[cardId]?.name ?? "Character"} located at ${cellConfigs[locationId]?.label || locationId}.`);
   }
 
   function sendCharacterToBench(cardId: string) {
-    const benchCellIds = [cellId(7, 0), cellId(7, 1), cellId(7, 2)];
+    const benchCellIds = [cellId(7, 2), cellId(7, 3), cellId(7, 4)];
     const currentLocationId = findCardCellId(cardId);
     const openBenchId =
       benchCellIds.find((id) => cellStates[id]?.cardIds.includes(cardId)) ??
@@ -348,7 +489,7 @@ export function TableLab() {
     });
 
     expandGridToCell(openBenchId);
-    setSelectedCellId(openBenchId);
+    selectSingleCell(openBenchId);
     setSelectedCardId(cardId);
     addLog(`${cards[cardId]?.name ?? "Character"} moved to the character bench.`);
   }
@@ -402,7 +543,7 @@ export function TableLab() {
       };
     });
     setSelectedCardId(cardId);
-    setSelectedCellId(targetCellId);
+    selectSingleCell(targetCellId);
   }
 
   function placeDeck(deckId: string, targetCellId: string) {
@@ -421,7 +562,7 @@ export function TableLab() {
         },
       };
     });
-    setSelectedCellId(targetCellId);
+    selectSingleCell(targetCellId);
   }
 
   function handleDrop(event: DragEvent<HTMLDivElement>, targetCellId: string) {
@@ -517,7 +658,7 @@ export function TableLab() {
       },
     }));
     setSelectedCardId(drawnCardId);
-    setSelectedCellId(targetCellId);
+    selectSingleCell(targetCellId);
     addLog(`${deck.name} drew ${cards[drawnCardId]?.name ?? "a card"}.`);
   }
 
@@ -552,6 +693,7 @@ export function TableLab() {
       {
         engineVersion: "0.1",
         gameVersion: "table-lab-prototype",
+        boardLayout,
         cards,
         cellConfigs,
         cellStates,
@@ -561,6 +703,9 @@ export function TableLab() {
         log,
         mode,
         rows,
+        selectedCellId,
+        selectedCellIds,
+        selectedCardId,
         tableRules,
       },
       null,
@@ -588,22 +733,41 @@ export function TableLab() {
           cellStates?: Record<string, CellState>;
           cols?: number;
           decks?: Record<string, LabDeck>;
+          boardLayout?: BoardLayoutShape;
           builderEditTarget?: BuilderEditTarget;
           log?: string[];
           mode?: TableMode;
           rows?: number;
+          selectedCardId?: string;
+          selectedCellId?: string;
+          selectedCellIds?: string[];
           tableRules?: TableRulesConfig;
         };
         if (parsed.cards) setCards(normalizeCards(parsed.cards));
         if (parsed.decks) setDecks(parsed.decks);
+        const nextBoardLayout = isBoardLayoutShape(parsed.boardLayout) ? parsed.boardLayout : boardLayout;
+        const nextDimensions = normalizeBoardDimensions(
+          nextBoardLayout,
+          parsed.rows ?? rows,
+          parsed.cols ?? cols,
+        );
+
+        setBoardLayout(nextBoardLayout);
+        setRows(nextDimensions.rows);
+        setCols(nextDimensions.cols);
         if (parsed.cellConfigs) setCellConfigs(normalizeCellConfigs(parsed.cellConfigs, parsed.cellStates));
         if (parsed.cellStates) setCellStates(parsed.cellStates);
         if (parsed.builderEditTarget === "table" || parsed.builderEditTarget === "card") {
           setBuilderEditTarget(parsed.builderEditTarget);
         }
-        if (parsed.rows) setRows(clampGridSize(parsed.rows));
-        if (parsed.cols) setCols(clampGridSize(parsed.cols));
         if (parsed.mode === "builder" || parsed.mode === "game") setMode(parsed.mode);
+        if (parsed.selectedCardId) setSelectedCardId(parsed.selectedCardId);
+        const nextSelectedCellIds = normalizeSelectedCellIds(
+          parsed.selectedCellIds,
+          parsed.selectedCellId,
+        );
+        setSelectedCellId(nextSelectedCellIds[0]);
+        setSelectedCellIds(nextSelectedCellIds);
         if (parsed.tableRules) setTableRules({ ...initialTableRules, ...parsed.tableRules });
         if (parsed.log) setLog(parsed.log);
         addLog("Imported table save.");
@@ -619,6 +783,7 @@ export function TableLab() {
     const fresh = makeInitialCells();
     setCards(initialCards);
     setDecks(initialDecks);
+    setBoardLayout("square");
     setCellConfigs(fresh.configs);
     setCellStates(fresh.states);
     setRows(8);
@@ -626,7 +791,7 @@ export function TableLab() {
     setBuilderEditTarget("table");
     setTableRules(initialTableRules);
     setMode("builder");
-    setSelectedCellId(cellId(2, 3));
+    selectSingleCell(cellId(2, 3));
     setSelectedCardId("glass-orchard");
     setLog(["Table Lab reset to the sample preset."]);
     window.localStorage.removeItem(STORAGE_KEY);
@@ -663,11 +828,11 @@ export function TableLab() {
             <h2>Board</h2>
             <p className="table-lab-note">
               {mode === "builder"
-                ? "Use the right workspace to edit Table or Card settings."
-                : "Table size is locked during Game Mode."}
+                ? `Builder controls are open. Current layout: ${boardLayout}.`
+                : "Table size is fixed during Game Mode."}
             </p>
             <div className="table-lab-legend" aria-label="Cell state legend">
-              <span><i className="table-lab-swatch table-lab-swatch--locked" />Locked</span>
+              <span><i className="table-lab-swatch table-lab-swatch--locked" />Unused</span>
               <span><i className="table-lab-swatch table-lab-swatch--empty" />Empty</span>
               <span><i className="table-lab-swatch table-lab-swatch--active" />Active</span>
               <span><i className="table-lab-swatch table-lab-swatch--deck-empty" />Deck empty</span>
@@ -719,17 +884,30 @@ export function TableLab() {
         <div className="table-lab-table-wrap">
           <div className="table-lab-camera">
             <div
-              className="table-lab-grid"
+              className={`table-lab-grid table-lab-grid--${boardLayout}`}
               style={{
+                aspectRatio: boardLayout === "rectangle" ? `${cols} / ${rows}` : "1",
                 gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
                 gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
               }}
             >
-              {visibleCellIds.map((id) => {
+              {boardCellIds.map((id) => {
                 const config = cellConfigs[id];
                 const state = cellStates[id];
-                const isSelected = id === selectedCellId;
                 const hasContents = state.cardIds.length > 0 || state.deckIds.length > 0;
+                const isLayoutCell = activeBoardCellIdSet.has(id);
+                const shouldRenderCell = isLayoutCell || hasContents || id === selectedCellId;
+                if (!shouldRenderCell) {
+                  return (
+                    <div
+                      aria-hidden="true"
+                      className="table-lab-cell table-lab-cell--layout-hidden"
+                      key={id}
+                    />
+                  );
+                }
+                const isSelected = selectedCellIds.includes(id);
+                const isPrimarySelected = id === selectedCellId;
                 const isDeckCell = config.allowDeck || config.deckKind !== "none";
                 const status = config.locked
                   ? "locked"
@@ -742,9 +920,9 @@ export function TableLab() {
                       : "empty";
                 return (
                   <div
-                    className={`table-lab-cell table-lab-cell--${status} table-lab-cell--role-${config.cellRole}${isSelected ? " table-lab-cell--selected" : ""}`}
+                    className={`table-lab-cell table-lab-cell--${status} table-lab-cell--role-${config.cellRole}${!isLayoutCell ? " table-lab-cell--outside-layout" : ""}${isSelected ? " table-lab-cell--selected" : ""}${isPrimarySelected ? " table-lab-cell--selected-primary" : ""}`}
                     key={id}
-                    onClick={() => setSelectedCellId(id)}
+                    onClick={(event) => handleCellClick(event, id)}
                     onDragOver={(event) => event.preventDefault()}
                     onDrop={(event) => handleDrop(event, id)}
                   >
@@ -802,13 +980,13 @@ export function TableLab() {
                             onClick={(event) => {
                               event.stopPropagation();
                               setSelectedCardId(cardId);
-                              setSelectedCellId(id);
+                              selectSingleCell(id);
                             }}
                             onDragStart={(event) => startDrag(event, { kind: "card", id: cardId })}
                             onPointerDown={(event) => {
                               event.stopPropagation();
                               setSelectedCardId(cardId);
-                              setSelectedCellId(id);
+                              selectSingleCell(id);
                             }}
                             style={{ transform: `rotate(${card.rotation}deg)` }}
                             type="button"
@@ -838,11 +1016,15 @@ export function TableLab() {
           {mode === "builder" ? (
             <BuilderInspector
               assignSelectedCellRole={assignSelectedCellRole}
+              boardLayout={boardLayout}
               builderEditTarget={builderEditTarget}
               cols={cols}
               rows={rows}
               selectedCard={selectedCard}
               selectedCell={selectedCell}
+              selectedCellCount={selectedCells.length}
+              clearMultiCellSelection={clearMultiCellSelection}
+              setBoardLayout={setBoardLayout}
               setBuilderEditTarget={setBuilderEditTarget}
               setCols={setCols}
               setRows={setRows}

@@ -3,28 +3,32 @@ import Link from "next/link";
 
 const projects = [
   {
-    name: "Playtest Board",
-    href: "/quantum-tunnel",
-    signal: "Paper game",
-    body: "A visual table layout for testing Quantum Tunnel cards, missions, battle pressure, and gate checks.",
-  },
-  {
-    name: "Board-Pieces",
-    href: "/board-pieces",
-    signal: "Room editor",
-    body: "A scaled board for placing measured room shapes and freely moving rotated pieces.",
+    name: "Kickstarter Updates",
+    navLabel: "Updates",
+    href: "https://anthologies.xyz/kickstarter-updates",
+    signal: "Launch journal",
+    body: "The current public update page for Anthologies, campaign progress, project notes, and what supporters should know next.",
   },
   {
     name: "Sovereign Engine",
+    navLabel: "Engine",
     href: "https://sovengine.xyz",
-    signal: "Verified origin",
-    body: "A Web3 character engine that uses astrology and EAS verification for proof of personhood, turning verified origin data into characters and future progeny projects.",
+    signal: "Character engine",
+    body: "Uses astrology and EAS verification for proof of personhood. The playtest board and board-pieces tools are ongoing test surfaces for this engine.",
   },
   {
     name: "Anthologies",
+    navLabel: "Anthologies",
     href: "https://anthologies.xyz",
     signal: "Story worlds",
-    body: "A home for connected stories, lore, collections, and living creative universes.",
+    body: "The story and publishing layer where worlds, lore, updates, and creator-facing releases can be gathered around the same source projects.",
+  },
+  {
+    name: "Web3 Access",
+    navLabel: "Web3",
+    href: "#web3-access",
+    signal: "Wallet tools",
+    body: "Wallets and NFTs are used as access tools, portable user storage, and production records for what a creator makes, tests, or unlocks.",
   },
 ] as const;
 
@@ -40,7 +44,7 @@ export default function Home() {
         <nav className="project-nav" aria-label="Project links">
           {projects.map((project) => (
             <Link key={project.href} href={project.href}>
-              {project.name}
+              {project.navLabel}
             </Link>
           ))}
         </nav>
@@ -51,9 +55,9 @@ export default function Home() {
           <p className="eyebrow">Parent signal / creator economy</p>
           <h1 id="alliant-title">Alliant</h1>
           <p className="hero-lede">
-            Alliant builds connected projects that help creators keep ownership
-            of their work and turn original ideas into durable passive-income
-            paths, powered by Web3.
+            Alliant connects story worlds, character engines, playtest tools,
+            and Web3 access systems so creators can build, test, publish, and
+            keep a stronger record of what they make.
           </p>
         </div>
 
@@ -84,16 +88,17 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mission-band" aria-label="Alliant mission">
+      <section className="mission-band" id="web3-access" aria-label="Alliant mission">
         <div>
           <p className="section-label">Direction</p>
-          <h2>Built for creators who want their work to keep working.</h2>
+          <h2>One project family, several connected tools.</h2>
         </div>
         <p>
-          Sovereign Engine and Anthologies approach the same mission from two
-          angles: identity-driven creation and story. Together they form an
-          ecosystem for keeping the source of creation visible, useful, and able
-          to create income over time.
+          Anthologies carries the public story layer, Sovereign Engine turns
+          verified identity and astrology into playable character systems, and
+          the Playtest Board plus Board-Pieces tools help those ideas become
+          testable. Web3 ties the pieces together with wallets and NFTs used for
+          access, user-owned records, and creator production paths.
         </p>
       </section>
 

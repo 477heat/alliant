@@ -36,8 +36,8 @@ export function makeInitialCells() {
     }
   }
 
-  configs[cellId(0, 0)] = {
-    ...configs[cellId(0, 0)],
+  configs[cellId(0, 2)] = {
+    ...configs[cellId(0, 2)],
     label: "Mission Deck",
     allowCards: false,
     allowDeck: true,
@@ -46,8 +46,8 @@ export function makeInitialCells() {
     deckKind: "mission",
     deckCapacityUnlimited: true,
   };
-  configs[cellId(0, 1)] = {
-    ...configs[cellId(0, 1)],
+  configs[cellId(0, 3)] = {
+    ...configs[cellId(0, 3)],
     label: "Item Deck",
     allowCards: false,
     allowDeck: true,
@@ -63,25 +63,9 @@ export function makeInitialCells() {
     cellRole: "mission-card",
     cardCapacity: 3,
   };
-  configs[cellId(7, 0)] = {
-    ...configs[cellId(7, 0)],
-    label: "Player 1 Character",
-    owner: "player-1",
-    cardKind: "character",
-    cellRole: "character-card",
-    cardCapacity: 1,
-  };
-  configs[cellId(7, 1)] = {
-    ...configs[cellId(7, 1)],
-    label: "Character Bench",
-    owner: "player-1",
-    cardKind: "character",
-    cellRole: "character-card",
-    cardCapacity: 1,
-  };
   configs[cellId(7, 2)] = {
     ...configs[cellId(7, 2)],
-    label: "Character Bench",
+    label: "Player 1 Character",
     owner: "player-1",
     cardKind: "character",
     cellRole: "character-card",
@@ -89,6 +73,22 @@ export function makeInitialCells() {
   };
   configs[cellId(7, 3)] = {
     ...configs[cellId(7, 3)],
+    label: "Character Bench",
+    owner: "player-1",
+    cardKind: "character",
+    cellRole: "character-card",
+    cardCapacity: 1,
+  };
+  configs[cellId(7, 4)] = {
+    ...configs[cellId(7, 4)],
+    label: "Character Bench",
+    owner: "player-1",
+    cardKind: "character",
+    cellRole: "character-card",
+    cardCapacity: 1,
+  };
+  configs[cellId(7, 5)] = {
+    ...configs[cellId(7, 5)],
     label: "Player 1 Loadout",
     owner: "player-1",
     cardKind: "item",
@@ -97,19 +97,19 @@ export function makeInitialCells() {
   };
   configs[cellId(4, 0)] = {
     ...configs[cellId(4, 0)],
-    label: "Locked",
+    label: "Unused",
     locked: true,
     allowCards: false,
     allowDeck: false,
     cardCapacity: 0,
   };
 
-  states[cellId(0, 0)].deckIds = ["mission-deck"];
-  states[cellId(0, 1)].deckIds = ["item-deck"];
+  states[cellId(0, 2)].deckIds = ["mission-deck"];
+  states[cellId(0, 3)].deckIds = ["item-deck"];
   states[cellId(2, 3)].cardIds = ["glass-orchard"];
-  states[cellId(7, 0)].cardIds = ["sweetpea"];
-  states[cellId(7, 1)].cardIds = ["kael-ember"];
-  states[cellId(7, 2)].cardIds = ["mira-tide"];
+  states[cellId(7, 2)].cardIds = ["sweetpea"];
+  states[cellId(7, 3)].cardIds = ["kael-ember"];
+  states[cellId(7, 4)].cardIds = ["mira-tide"];
 
   return { configs, states };
 }
